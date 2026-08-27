@@ -26,11 +26,17 @@ export class InvoicePreview {
   async update(invoice) {
     this.invoice = invoice;
     
-    // Generate UPI QR code if enabled
-    if (invoice.bankDetails?.upiId && invoice.bankDetails?.showQr) {
-      const calcs = calculateInvoice(invoice);
-      const uri = buildUPIUri(invoice.bankDetails.upiId, invoice.seller?.name, calcs.grandTotal, invoice.invoiceNumber);
-      this.qrCodeUrl = await generateQRCodeDataUrl(uri, 180);
+    // Generate UPI QR code if enabled or use custom uploaded QR image
+    if (invoice.bankDetails?.showQr) {
+      if (invoice.bankDetails?.customQrImage) {
+        this.qrCodeUrl = invoice.bankDetails.customQrImage;
+      } else if (invoice.bankDetails?.upiId) {
+        const calcs = calculateInvoice(invoice);
+        const uri = buildUPIUri(invoice.bankDetails.upiId, invoice.seller?.name, calcs.grandTotal, invoice.invoiceNumber);
+        this.qrCodeUrl = await generateQRCodeDataUrl(uri, 180);
+      } else {
+        this.qrCodeUrl = '';
+      }
     } else {
       this.qrCodeUrl = '';
     }

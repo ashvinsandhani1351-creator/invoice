@@ -39,10 +39,14 @@ export async function downloadInvoicePDF(_ignoredElement, invoice, qrCodeUrl = '
   try {
     // 1. Ensure QR Code is generated if enabled
     let finalQrCodeUrl = qrCodeUrl;
-    if (!finalQrCodeUrl && invoice.bankDetails?.upiId && invoice.bankDetails?.showQr) {
-      const calcs = calculateInvoice(invoice);
-      const uri = buildUPIUri(invoice.bankDetails.upiId, invoice.seller?.name, calcs.grandTotal, invoice.invoiceNumber);
-      finalQrCodeUrl = await generateQRCodeDataUrl(uri, 180);
+    if (!finalQrCodeUrl && invoice.bankDetails?.showQr) {
+      if (invoice.bankDetails?.customQrImage) {
+        finalQrCodeUrl = invoice.bankDetails.customQrImage;
+      } else if (invoice.bankDetails?.upiId) {
+        const calcs = calculateInvoice(invoice);
+        const uri = buildUPIUri(invoice.bankDetails.upiId, invoice.seller?.name, calcs.grandTotal, invoice.invoiceNumber);
+        finalQrCodeUrl = await generateQRCodeDataUrl(uri, 180);
+      }
     }
 
     // 2. Compute financial calculations & render clean HTML template
@@ -167,10 +171,14 @@ export async function printInvoice(invoice, qrCodeUrl = '') {
 
   if (invoice) {
     let finalQrCodeUrl = qrCodeUrl;
-    if (!finalQrCodeUrl && invoice.bankDetails?.upiId && invoice.bankDetails?.showQr) {
-      const calcs = calculateInvoice(invoice);
-      const uri = buildUPIUri(invoice.bankDetails.upiId, invoice.seller?.name, calcs.grandTotal, invoice.invoiceNumber);
-      finalQrCodeUrl = await generateQRCodeDataUrl(uri, 180);
+    if (!finalQrCodeUrl && invoice.bankDetails?.showQr) {
+      if (invoice.bankDetails?.customQrImage) {
+        finalQrCodeUrl = invoice.bankDetails.customQrImage;
+      } else if (invoice.bankDetails?.upiId) {
+        const calcs = calculateInvoice(invoice);
+        const uri = buildUPIUri(invoice.bankDetails.upiId, invoice.seller?.name, calcs.grandTotal, invoice.invoiceNumber);
+        finalQrCodeUrl = await generateQRCodeDataUrl(uri, 180);
+      }
     }
 
     const calculations = calculateInvoice(invoice);

@@ -119,9 +119,9 @@ export function renderModernTemplate(invoice, calculations, qrCodeUrl) {
                   ${invoice.bankDetails?.upiId ? `<div><span class="text-gray-400">UPI:</span> <span class="font-mono font-bold text-indigo-700">${escapeHtml(invoice.bankDetails.upiId)}</span></div>` : ''}
                 </div>
 
-                ${invoice.bankDetails?.upiId && invoice.bankDetails?.showQr && qrCodeUrl ? `
+                ${invoice.bankDetails?.showQr && qrCodeUrl ? `
                   <div class="text-center shrink-0">
-                    <img src="${qrCodeUrl}" alt="UPI QR" class="w-16 h-16 border border-gray-200 rounded-lg p-0.5 bg-white shadow-2xs" />
+                    <img src="${qrCodeUrl}" alt="Payment QR" class="w-16 h-16 border border-gray-200 rounded-lg p-0.5 bg-white shadow-2xs" />
                     <div class="text-[8px] text-gray-500 font-bold mt-0.5">Scan & Pay</div>
                   </div>
                 ` : ''}
@@ -241,7 +241,7 @@ export function renderModernTemplate(invoice, calculations, qrCodeUrl) {
 }
 
 function hasPaymentDetails(bank) {
-  return bank && (bank.bankName || bank.accountNumber || bank.upiId || bank.ifsc || bank.swift);
+  return bank && (bank.bankName || bank.accountNumber || bank.upiId || bank.ifsc || bank.swift || (bank.showQr && (bank.customQrImage || bank.upiId)));
 }
 
 function formatDate(dateStr) {

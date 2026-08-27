@@ -429,21 +429,55 @@ export class InvoiceEditor {
             </div>
 
             <!-- UPI ID & QR Code Option -->
-            <div class="md:col-span-2 pt-2 border-t border-gray-100">
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div class="sm:col-span-2">
-                  <label class="block text-xs font-semibold text-gray-700 mb-1">
-                    UPI ID <span class="text-indigo-600 font-normal">(Instant Mobile Scan & Pay)</span>
-                  </label>
-                  <input type="text" id="upiId" value="${escapeHtml(inv.bankDetails?.upiId || '')}" placeholder="e.g. yourname@oksbi or business@hdfcbank" class="w-full px-3.5 py-2 text-sm font-mono bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none" />
-                </div>
-                <div class="flex items-end pb-2">
-                  <label class="flex items-center gap-2 cursor-pointer text-xs text-gray-700 select-none">
-                    <input type="checkbox" id="showQrCheck" ${inv.bankDetails?.showQr ? 'checked' : ''} class="rounded text-indigo-600 focus:ring-indigo-500" />
-                    <span class="font-medium">Show UPI QR on Invoice</span>
-                  </label>
-                </div>
+            <div class="md:col-span-2 pt-2 border-t border-gray-100 space-y-3">
+              <div class="flex items-center justify-between">
+                <label class="flex items-center gap-2 cursor-pointer text-xs text-gray-800 select-none">
+                  <input type="checkbox" id="showQrCheck" ${inv.bankDetails?.showQr ? 'checked' : ''} class="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                  <span class="font-bold">Show UPI / Payment QR on Invoice</span>
+                </label>
+                <span class="text-[11px] text-gray-500">Auto-generated or custom uploaded QR</span>
               </div>
+
+              ${inv.bankDetails?.showQr ? `
+                <div class="p-3.5 bg-slate-50 border border-indigo-100 rounded-xl space-y-3">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                    
+                    <!-- Option 1: UPI ID for auto QR -->
+                    <div>
+                      <label class="block text-xs font-semibold text-gray-700 mb-1">
+                        Auto-Generate QR with UPI ID
+                      </label>
+                      <input type="text" id="upiId" value="${escapeHtml(inv.bankDetails?.upiId || '')}" placeholder="e.g. yourname@oksbi or business@hdfcbank" class="w-full px-3.5 py-2 text-sm font-mono bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none" />
+                      <p class="text-[10px] text-gray-400 mt-1">Generates dynamic QR with amount & invoice number</p>
+                    </div>
+
+                    <!-- Option 2: Upload Custom QR image -->
+                    <div>
+                      <label class="block text-xs font-semibold text-gray-700 mb-1">
+                        Or Upload Custom QR Image
+                      </label>
+                      <div class="flex items-center gap-3">
+                        ${inv.bankDetails?.customQrImage ? `
+                          <div class="relative group shrink-0">
+                            <img src="${inv.bankDetails.customQrImage}" alt="Custom QR" class="w-12 h-12 rounded-lg border border-gray-200 object-contain bg-white p-0.5 shadow-2xs" />
+                            <button type="button" id="removeCustomQrBtn" class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-rose-500 text-white rounded-full flex items-center justify-center text-[10px] shadow-sm hover:bg-rose-600 transition-colors" title="Remove custom QR">
+                              &times;
+                            </button>
+                          </div>
+                        ` : ''}
+
+                        <label class="flex-1 px-3 py-2 bg-white hover:bg-slate-100 border border-gray-200 border-dashed rounded-xl cursor-pointer flex items-center justify-center gap-2 text-xs font-semibold text-indigo-600 transition-colors">
+                          <i data-lucide="qr-code" class="w-4 h-4"></i>
+                          <span>${inv.bankDetails?.customQrImage ? 'Change QR Image' : 'Upload QR Image (PNG/JPG)'}</span>
+                          <input type="file" id="customQrInput" accept="image/*" class="hidden" />
+                        </label>
+                      </div>
+                      <p class="text-[10px] text-gray-400 mt-1">Upload merchant scanner from PhonePe, GPay, Paytm, BHIM</p>
+                    </div>
+
+                  </div>
+                </div>
+              ` : ''}
             </div>
           </div>
         </div>
@@ -786,11 +820,42 @@ export class InvoiceEditor {
     bindInput('accountNumber', val => this.invoice.bankDetails.accountNumber = val);
     bindInput('ifscCode', val => this.invoice.bankDetails.ifsc = val.toUpperCase());
     bindInput('upiId', val => this.invoice.bankDetails.upiId = val);
-
     const showQrCheck = document.getElementById('showQrCheck');
     if (showQrCheck) {
       showQrCheck.onchange = (e) => {
+        if (!this.invoice.bankDetails) this.invoice.bankDetails = {};
         this.invoice.bankDetails.showQr = e.target.checked;
+        this.render();
+        this.bindEvents();
+        emitChange();
+      };
+    }
+
+    const customQrInput = document.getElementById('customQrInput');
+    if (customQrInput) {
+      customQrInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (re) => {
+            if (!this.invoice.bankDetails) this.invoice.bankDetails = {};
+            this.invoice.bankDetails.customQrImage = re.target.result;
+            this.render();
+            this.bindEvents();
+            emitChange();
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+    }
+
+    const removeCustomQrBtn = document.getElementById('removeCustomQrBtn');
+    if (removeCustomQrBtn) {
+      removeCustomQrBtn.onclick = () => {
+        if (!this.invoice.bankDetails) this.invoice.bankDetails = {};
+        this.invoice.bankDetails.customQrImage = '';
+        this.render();
+        this.bindEvents();
         emitChange();
       };
     }
