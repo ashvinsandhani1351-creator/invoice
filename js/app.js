@@ -205,7 +205,15 @@ class InvoicePdfGeneratorApp {
       }
     };
 
-    if (historyBtn) historyBtn.onclick = () => toggleHistory(true);
+    if (historyBtn) {
+      historyBtn.onclick = () => {
+        if (this.currentInvoice && (this.currentInvoice.seller?.name || this.currentInvoice.customer?.name || this.currentInvoice.items?.length > 0)) {
+          saveToHistory(this.currentInvoice);
+          this.showToast(`Invoice ${this.currentInvoice.invoiceNumber || ''} saved to history!`, 'success');
+        }
+        toggleHistory(true);
+      };
+    }
     if (historyCloseBtn) historyCloseBtn.onclick = () => toggleHistory(false);
     if (historyBackdrop) historyBackdrop.onclick = () => toggleHistory(false);
 
