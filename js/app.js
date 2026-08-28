@@ -119,31 +119,55 @@ class InvoicePdfGeneratorApp {
     const downloadPdfBtn = document.getElementById('downloadPdfBtn');
     const mobileDownloadPdfBtn = document.getElementById('mobileDownloadPdfBtn');
 
+    let isGeneratingPdf = false;
+
     const handleDownload = async () => {
+      if (isGeneratingPdf) return;
+
       const validation = validateInvoice(this.currentInvoice);
       if (!validation.isValid) {
         this.showToast(validation.errors[0], 'warning');
       }
 
-      const sheetElement = document.getElementById('invoiceRenderRoot');
-      if (!sheetElement) return;
+      isGeneratingPdf = true;
 
-      const originalBtnText = downloadPdfBtn.innerHTML;
-      downloadPdfBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Generating PDF...`;
-      downloadPdfBtn.disabled = true;
+      // Save original HTML
+      const origDesktopHtml = downloadPdfBtn ? downloadPdfBtn.innerHTML : '';
+      const origMobileHtml = mobileDownloadPdfBtn ? mobileDownloadPdfBtn.innerHTML : '';
+
+      // Set loading state on both buttons
+      if (downloadPdfBtn) {
+        downloadPdfBtn.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin"></i> <span>Creating PDF...</span>`;
+        downloadPdfBtn.disabled = true;
+      }
+      if (mobileDownloadPdfBtn) {
+        mobileDownloadPdfBtn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> <span>Creating PDF...</span>`;
+        mobileDownloadPdfBtn.disabled = true;
+      }
+      if (window.lucide) window.lucide.createIcons();
+
+      this.showToast('Generating high-resolution A4 PDF...', 'info');
 
       try {
-        await downloadInvoicePDF(sheetElement, this.currentInvoice, this.preview?.qrCodeUrl);
+        await downloadInvoicePDF(null, this.currentInvoice, this.preview?.qrCodeUrl);
         // Automatically save to local history
         saveToHistory(this.currentInvoice);
         this.renderHistoryList();
         this.showToast('Invoice PDF downloaded successfully!', 'success');
       } catch (err) {
-        console.error('PDF error:', err);
-        this.showToast('Failed to generate PDF. Triggered print dialog.', 'warning');
+        console.error('PDF generation error:', err);
+        this.showToast('Could not generate PDF. Opening print dialog...', 'warning');
+        printInvoice(this.currentInvoice, this.preview?.qrCodeUrl);
       } finally {
-        downloadPdfBtn.innerHTML = originalBtnText;
-        downloadPdfBtn.disabled = false;
+        isGeneratingPdf = false;
+        if (downloadPdfBtn) {
+          downloadPdfBtn.innerHTML = origDesktopHtml;
+          downloadPdfBtn.disabled = false;
+        }
+        if (mobileDownloadPdfBtn) {
+          mobileDownloadPdfBtn.innerHTML = origMobileHtml;
+          mobileDownloadPdfBtn.disabled = false;
+        }
         if (window.lucide) window.lucide.createIcons();
       }
     };

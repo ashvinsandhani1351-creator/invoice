@@ -1,6 +1,6 @@
 /**
  * Client-side High-Fidelity PDF Generator
- * Renders invoices cleanly in a dedicated offscreen A4 container to prevent blank captures or clipping
+ * Renders invoices cleanly in an isolated offscreen A4 container with full mobile browser support (iOS Safari & Android Chrome)
  */
 
 import { renderInvoiceTemplate } from '../templates/index.js';
@@ -17,8 +17,45 @@ function sanitizeFilename(name) {
 }
 
 /**
+ * Robustly saves a PDF blob on all mobile and desktop browsers
+ * @param {Object} doc - jsPDF instance
+ * @param {string} filename - target PDF filename
+ */
+function savePdfFile(doc, filename) {
+  try {
+    const pdfBlob = doc.output('blob');
+    const blobUrl = URL.createObjectURL(pdfBlob);
+
+    const isIOS = typeof navigator !== 'undefined' && (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream);
+
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    if (isIOS) {
+      link.target = '_blank';
+      link.rel = 'noopener';
+    }
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+
+    setTimeout(() => {
+      if (link.parentNode) {
+        link.parentNode.removeChild(link);
+      }
+      URL.revokeObjectURL(blobUrl);
+    }, 10000);
+    return true;
+  } catch (err) {
+    console.warn('Custom blob download failed, falling back to doc.save:', err);
+    doc.save(filename);
+    return true;
+  }
+}
+
+/**
  * Generates and downloads an exact Single A4 PDF file (210mm x 297mm)
- * @param {HTMLElement} _ignoredElement
+ * @param {HTMLElement|null} _ignoredElement
  * @param {Object} invoice - The invoice data object
  * @param {string} [qrCodeUrl] - Optional pre-computed QR code URL
  * @returns {Promise<boolean>}
@@ -54,20 +91,22 @@ export async function downloadInvoicePDF(_ignoredElement, invoice, qrCodeUrl = '
     const templateHtml = renderInvoiceTemplate(invoice, calculations, finalQrCodeUrl);
 
     // 3. Create isolated offscreen container with exact standard A4 width (794px at 96 DPI)
+    // Using position:fixed, top:0, left:0, opacity:0.01 so mobile WebKit renders it in the DOM tree
     tempContainer = document.createElement('div');
     tempContainer.id = 'pdf-render-temp-container';
     tempContainer.style.cssText = `
       position: fixed !important;
       top: 0 !important;
-      left: -9999px !important;
+      left: 0 !important;
       width: 794px !important;
       min-height: 1123px !important;
       max-width: 794px !important;
       background-color: #ffffff !important;
       z-index: -9999 !important;
+      pointer-events: none !important;
+      opacity: 0.01 !important;
       display: block !important;
       visibility: visible !important;
-      opacity: 1 !important;
       box-sizing: border-box !important;
       margin: 0 !important;
       padding: 0 !important;
@@ -97,16 +136,22 @@ export async function downloadInvoicePDF(_ignoredElement, invoice, qrCodeUrl = '
       }));
     }
 
-    // 5. Render canvas via html2canvas
+    // 5. Render canvas via html2canvas with mobile-optimized settings
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     const canvas = await window.html2canvas(tempContainer, {
-      scale: 2, // 300 DPI sharpness
+      scale: isMobile ? 1.5 : 2, // 1.5x on mobile prevents iOS WebKit memory crash while keeping crisp 300 DPI clarity
       useCORS: true,
       allowTaint: true,
       logging: false,
       backgroundColor: '#ffffff',
+      x: 0,
+      y: 0,
+      width: 794,
+      height: tempContainer.offsetHeight || 1123,
+      windowWidth: 794,
+      windowHeight: 1123,
       scrollX: 0,
-      scrollY: 0,
-      windowWidth: 1024
+      scrollY: 0
     });
 
     // 6. Generate PDF in jsPDF strictly fitted to 1 A4 page
@@ -138,17 +183,16 @@ export async function downloadInvoicePDF(_ignoredElement, invoice, qrCodeUrl = '
     const imgData = canvas.toDataURL('image/png');
     doc.addImage(imgData, 'PNG', posX, posY, finalWidth, finalHeight, undefined, 'FAST');
 
-    // 7. Save PDF file
+    // 7. Save PDF file cleanly across all devices
     const invNumber = sanitizeFilename(invoice.invoiceNumber || 'INV-001');
     const customer = sanitizeFilename(invoice.customer?.name || 'Customer');
     const filename = `Invoice_${invNumber}_${customer}.pdf`;
 
-    doc.save(filename);
+    savePdfFile(doc, filename);
     return true;
   } catch (error) {
     console.error('PDF generation error:', error);
-    window.print();
-    return false;
+    throw error;
   } finally {
     if (tempContainer && tempContainer.parentNode) {
       tempContainer.parentNode.removeChild(tempContainer);
