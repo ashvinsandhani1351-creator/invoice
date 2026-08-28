@@ -200,33 +200,33 @@
 
   <!-- TOP APP BAR -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs no-print">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
       
       <!-- Brand Logo & Positioning -->
-      <div class="flex items-center gap-3">
-        <a href="/" class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200 hover:bg-indigo-700 transition-colors">
-          <i data-lucide="receipt" class="w-5 h-5"></i>
+      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+        <a href="/" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200 hover:bg-indigo-700 transition-colors shrink-0">
+          <i data-lucide="receipt" class="w-4 h-4 sm:w-5 sm:h-5"></i>
         </a>
-        <div>
-          <div class="flex items-center gap-2">
-            <a href="/" class="font-extrabold text-lg text-slate-900 tracking-tight font-display hover:text-indigo-600 transition-colors lowercase">invoicepdfgenerator</a>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 tracking-wide uppercase">Free • No Watermark</span>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <a href="/" class="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight font-display hover:text-indigo-600 transition-colors lowercase truncate">invoicepdfgenerator</a>
+            <span class="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 tracking-wide uppercase">Free</span>
           </div>
-          <p class="text-[11px] text-slate-500 hidden sm:block">Create professional invoices in seconds. No signup.</p>
+          <p class="text-[11px] text-slate-500 hidden md:block">Create professional invoices in seconds. No signup.</p>
         </div>
       </div>
 
-      <!-- Center Privacy & Auto-Save Badge -->
-      <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200/80">
+      <!-- Center Privacy Badge (Desktop only) -->
+      <div class="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200/80">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         <span id="saveIndicator" class="text-[11px] text-slate-600 font-medium">100% Private & Local</span>
       </div>
 
       <!-- Right Action CTAs -->
-      <div class="flex items-center gap-2 sm:gap-2.5">
+      <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
         
-        <!-- See Example Preset Dropdown -->
-        <div class="relative hidden sm:block">
+        <!-- Example Preset Dropdown (Hidden on tiny screens) -->
+        <div class="relative hidden md:block">
           <select id="sampleInvoiceSelect" class="text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 py-2 px-2.5 rounded-xl border border-slate-200 transition-colors cursor-pointer outline-none">
             <option value="" disabled selected>✨ See Example...</option>
             <option value="gst_consulting">🇮🇳 Tech Consulting (GST + UPI)</option>
@@ -236,24 +236,25 @@
         </div>
 
         <!-- Save Invoice Button -->
-        <button type="button" id="historyBtn" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Save & View Saved Invoices">
+        <button type="button" id="historyBtn" class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Save & View Saved Invoices">
           <i data-lucide="bookmark-check" class="w-3.5 h-3.5 text-indigo-600"></i>
-          <span>Save Invoice</span>
+          <span class="hidden xs:inline">Save</span>
         </button>
 
         <!-- New Invoice Button -->
-        <button type="button" id="newInvoiceBtn" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Create New Invoice">
-          <i data-lucide="file-plus" class="w-3.5 h-3.5"></i> New
+        <button type="button" id="newInvoiceBtn" class="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Create New Invoice">
+          <i data-lucide="file-plus" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">New</span>
         </button>
 
-        <!-- Print Button -->
+        <!-- Print Button (Desktop only) -->
         <button type="button" id="printBtn" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Print Invoice (Ctrl+P)">
           <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print
         </button>
 
         <!-- Download PDF (Primary CTA) -->
-        <button type="button" id="downloadPdfBtn" class="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-indigo-200 transition-all cursor-pointer">
-          <i data-lucide="download" class="w-4 h-4"></i>
+        <button type="button" id="downloadPdfBtn" class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-indigo-200 transition-all cursor-pointer">
+          <i data-lucide="download" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
           <span>Download PDF</span>
         </button>
 
@@ -261,27 +262,29 @@
     </div>
 
     <!-- Mobile Tab Selector (Edit Form vs Live Preview) -->
-    <div class="lg:hidden px-4 pb-2 pt-1 border-t border-slate-100 flex gap-2">
-      <button type="button" id="mobileTabEdit" class="flex-1 py-2 rounded-lg text-xs font-bold bg-white text-indigo-700 shadow-sm border border-slate-200/60">
-        ✏️ Edit Invoice
+    <div class="lg:hidden px-3 py-1.5 bg-slate-100/90 border-t border-slate-200/80 flex gap-2">
+      <button type="button" id="mobileTabEdit" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-white text-indigo-700 shadow-xs border border-slate-200/60 flex items-center justify-center gap-1.5 transition-all">
+        <i data-lucide="file-edit" class="w-3.5 h-3.5"></i>
+        <span>1. Edit Invoice</span>
       </button>
-      <button type="button" id="mobileTabPreview" class="flex-1 py-2 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-900">
-        👁️ Live Preview
+      <button type="button" id="mobileTabPreview" class="flex-1 py-2 px-3 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition-all">
+        <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+        <span>2. Live Preview (A4)</span>
       </button>
     </div>
   </header>
 
-  <!-- MAIN APP CONTAINER (SPLIT SCREEN ON DESKTOP) -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+  <!-- MAIN APP CONTAINER (SPLIT SCREEN ON DESKTOP, TABBED ON MOBILE) -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 pb-32 lg:pb-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
       
       <!-- LEFT: FORM EDITOR (7 COLS ON DESKTOP) -->
-      <div id="editorColumn" class="lg:col-span-6 xl:col-span-6 editor-container">
+      <div id="editorColumn" class="lg:col-span-6 xl:col-span-6 editor-container w-full">
         <div id="editorContainer"></div>
       </div>
 
       <!-- RIGHT: LIVE REAL-TIME A4 PREVIEW (5 COLS ON DESKTOP - STICKY) -->
-      <div id="previewColumn" class="hidden lg:block lg:col-span-6 xl:col-span-6 lg:sticky lg:top-24 h-[calc(100vh-7rem)]">
+      <div id="previewColumn" class="hidden lg:block lg:col-span-6 xl:col-span-6 lg:sticky lg:top-24 h-auto lg:h-[calc(100vh-7rem)] w-full">
         <div id="previewContainer" class="h-full"></div>
       </div>
 
@@ -490,11 +493,12 @@
   </section>
 
   <!-- MOBILE FLOATING ACTION BAR -->
-  <div id="mobileActionBar" class="lg:hidden fixed bottom-0 left-0 right-0 p-3 bg-white/95 backdrop-blur-md border-t border-slate-200 z-30 flex items-center justify-between gap-2 shadow-lg no-print">
-    <div class="text-xs text-slate-500">
-      <span class="font-bold text-slate-900">100% Free</span> • No Watermark
-    </div>
-    <button type="button" id="mobileDownloadPdfBtn" class="flex-1 max-w-xs py-2.5 px-4 bg-indigo-600 text-white rounded-xl font-bold text-xs shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
+  <div id="mobileActionBar" class="lg:hidden fixed bottom-0 left-0 right-0 p-2.5 px-3 bg-white/95 backdrop-blur-md border-t border-slate-200 z-30 flex items-center justify-between gap-2 shadow-lg no-print">
+    <button type="button" id="mobileTogglePreviewBtn" class="py-2.5 px-3.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 rounded-xl font-bold text-xs flex items-center gap-1.5 border border-slate-200/80 transition-colors shrink-0">
+      <i data-lucide="eye" class="w-4 h-4 text-indigo-600"></i>
+      <span id="mobileToggleText">View A4</span>
+    </button>
+    <button type="button" id="mobileDownloadPdfBtn" class="flex-1 py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white rounded-xl font-bold text-xs shadow-md shadow-indigo-200 flex items-center justify-center gap-2 transition-all">
       <i data-lucide="download" class="w-4 h-4"></i> Download Free PDF
     </button>
   </div>
@@ -566,6 +570,6 @@
   </footer>
 
   <!-- App Entry Script -->
-  <script type="module" src="js/app.js?v=2.0.1"></script>
+  <script type="module" src="js/app.js?v=2.1.0"></script>
 </body>
 </html>

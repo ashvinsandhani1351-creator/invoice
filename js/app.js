@@ -251,6 +251,8 @@ class InvoicePdfGeneratorApp {
     // Mobile Navigation Switcher (Edit Form vs Live Preview)
     const mobileTabEdit = document.getElementById('mobileTabEdit');
     const mobileTabPreview = document.getElementById('mobileTabPreview');
+    const mobileTogglePreviewBtn = document.getElementById('mobileTogglePreviewBtn');
+    const mobileToggleText = document.getElementById('mobileToggleText');
     const editorCol = document.getElementById('editorColumn');
     const previewCol = document.getElementById('previewColumn');
 
@@ -260,25 +262,41 @@ class InvoicePdfGeneratorApp {
         editorCol.classList.remove('hidden');
         previewCol.classList.add('hidden', 'lg:block');
         if (mobileTabEdit) {
-          mobileTabEdit.className = 'flex-1 py-2 rounded-lg text-xs font-bold bg-white text-indigo-700 shadow-sm';
+          mobileTabEdit.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-white text-indigo-700 shadow-xs border border-slate-200/60 flex items-center justify-center gap-1.5 transition-all';
         }
         if (mobileTabPreview) {
-          mobileTabPreview.className = 'flex-1 py-2 rounded-lg text-xs font-medium text-gray-500 hover:text-gray-900';
+          mobileTabPreview.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition-all';
         }
+        if (mobileToggleText) mobileToggleText.textContent = 'View A4';
       } else {
         editorCol.classList.add('hidden');
         previewCol.classList.remove('hidden');
         if (mobileTabPreview) {
-          mobileTabPreview.className = 'flex-1 py-2 rounded-lg text-xs font-bold bg-white text-indigo-700 shadow-sm';
+          mobileTabPreview.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-white text-indigo-700 shadow-xs border border-slate-200/60 flex items-center justify-center gap-1.5 transition-all';
         }
         if (mobileTabEdit) {
-          mobileTabEdit.className = 'flex-1 py-2 rounded-lg text-xs font-medium text-gray-500 hover:text-gray-900';
+          mobileTabEdit.className = 'flex-1 py-2 px-3 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5 transition-all';
         }
+        if (mobileToggleText) mobileToggleText.textContent = 'Edit Form';
+
+        // Auto-fit preview to mobile viewport
+        if (this.preview) {
+          this.preview.update(this.currentInvoice);
+          setTimeout(() => {
+            this.preview.autoFitToScreen();
+          }, 50);
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
 
     if (mobileTabEdit) mobileTabEdit.onclick = () => setMobileTab('edit');
     if (mobileTabPreview) mobileTabPreview.onclick = () => setMobileTab('preview');
+    if (mobileTogglePreviewBtn) {
+      mobileTogglePreviewBtn.onclick = () => {
+        setMobileTab(this.currentMobileTab === 'preview' ? 'edit' : 'preview');
+      };
+    }
 
     // Keyboard shortcuts
     window.addEventListener('keydown', (e) => {

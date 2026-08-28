@@ -39,7 +39,7 @@ export class InvoiceEditor {
       <div class="space-y-6 pb-24 lg:pb-12 text-gray-800">
         
         <!-- SECTION 1: YOUR BUSINESS -->
-        <div class="bg-white rounded-2xl p-6 border border-gray-200/80 shadow-sm transition-all hover:border-gray-300">
+        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
           <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
             <div class="flex items-center gap-2.5">
               <span class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">1</span>
@@ -121,7 +121,7 @@ export class InvoiceEditor {
         </div>
 
         <!-- SECTION 2: CUSTOMER DETAILS -->
-        <div class="bg-white rounded-2xl p-6 border border-gray-200/80 shadow-sm transition-all hover:border-gray-300">
+        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
           <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
             <div class="flex items-center gap-2.5">
               <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">2</span>
@@ -159,7 +159,7 @@ export class InvoiceEditor {
 
             <!-- Progressive Shipping Address Toggle -->
             <div class="md:col-span-2">
-              <button type="button" id="toggleShippingBtn" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1.5">
+              <button type="button" id="toggleShippingBtn" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1.5 touch-target">
                 <i data-lucide="${this.showShipping ? 'minus-circle' : 'plus-circle'}" class="w-4 h-4"></i>
                 ${this.showShipping ? 'Remove separate shipping address' : '+ Add separate shipping address'}
               </button>
@@ -190,7 +190,7 @@ export class InvoiceEditor {
         </div>
 
         <!-- SECTION 3: INVOICE DETAILS & CURRENCY -->
-        <div class="bg-white rounded-2xl p-6 border border-gray-200/80 shadow-sm transition-all hover:border-gray-300">
+        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
           <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
             <div class="flex items-center gap-2.5">
               <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">3</span>
@@ -248,7 +248,7 @@ export class InvoiceEditor {
         </div>
 
         <!-- SECTION 4: LINE ITEMS -->
-        <div class="bg-white rounded-2xl p-6 border border-gray-200/80 shadow-sm transition-all hover:border-gray-300">
+        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
           <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
             <div class="flex items-center gap-2.5">
               <span class="w-8 h-8 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center font-bold text-sm">4</span>
@@ -266,15 +266,15 @@ export class InvoiceEditor {
 
           <!-- Add Item Button -->
           <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
-            <button type="button" id="addItemBtn" class="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl font-semibold text-xs transition-colors inline-flex items-center gap-2">
+            <button type="button" id="addItemBtn" class="px-4 py-2.5 bg-indigo-50 hover:bg-indigo-100 active:bg-indigo-200 text-indigo-700 rounded-xl font-bold text-xs transition-colors inline-flex items-center gap-2 touch-target">
               <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Line Item
             </button>
-            <span class="text-xs text-gray-400">${(inv.items || []).length} item${(inv.items || []).length === 1 ? '' : 's'}</span>
+            <span class="text-xs text-gray-400 font-medium">${(inv.items || []).length} item${(inv.items || []).length === 1 ? '' : 's'}</span>
           </div>
         </div>
 
         <!-- SECTION 5: DISCOUNTS, TAXES & CHARGES -->
-        <div class="bg-white rounded-2xl p-6 border border-gray-200/80 shadow-sm transition-all hover:border-gray-300">
+        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
           <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
             <div class="flex items-center gap-2.5">
               <span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">5</span>
@@ -289,23 +289,23 @@ export class InvoiceEditor {
             <!-- Tax Mode Radio Pills -->
             <div>
               <label class="block text-xs font-semibold text-gray-700 mb-2">Tax Calculation Mode</label>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                <label class="flex items-center gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${inv.taxMode === 'none' ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-semibold' : 'border-gray-200 bg-slate-50 text-gray-700'}">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <label class="flex items-center gap-2 p-2.5 sm:p-3 rounded-xl border cursor-pointer transition-all ${inv.taxMode === 'none' ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-semibold' : 'border-gray-200 bg-slate-50 text-gray-700'}">
                   <input type="radio" name="taxMode" value="none" ${inv.taxMode === 'none' ? 'checked' : ''} class="text-indigo-600 focus:ring-indigo-500" />
                   <span class="text-xs">No Tax</span>
                 </label>
 
-                <label class="flex items-center gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${inv.taxMode === 'single' ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-semibold' : 'border-gray-200 bg-slate-50 text-gray-700'}">
+                <label class="flex items-center gap-2 p-2.5 sm:p-3 rounded-xl border cursor-pointer transition-all ${inv.taxMode === 'single' ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-semibold' : 'border-gray-200 bg-slate-50 text-gray-700'}">
                   <input type="radio" name="taxMode" value="single" ${inv.taxMode === 'single' ? 'checked' : ''} class="text-indigo-600 focus:ring-indigo-500" />
-                  <span class="text-xs">Single Tax % (VAT)</span>
+                  <span class="text-xs">Single Tax / VAT</span>
                 </label>
 
-                <label class="flex items-center gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${inv.taxMode === 'gst-intra' ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-semibold' : 'border-gray-200 bg-slate-50 text-gray-700'}">
+                <label class="flex items-center gap-2 p-2.5 sm:p-3 rounded-xl border cursor-pointer transition-all ${inv.taxMode === 'gst-intra' ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-semibold' : 'border-gray-200 bg-slate-50 text-gray-700'}">
                   <input type="radio" name="taxMode" value="gst-intra" ${inv.taxMode === 'gst-intra' ? 'checked' : ''} class="text-indigo-600 focus:ring-indigo-500" />
-                  <span class="text-xs">GST (CGST + SGST)</span>
+                  <span class="text-xs">GST (CGST+SGST)</span>
                 </label>
 
-                <label class="flex items-center gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${inv.taxMode === 'gst-inter' ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-semibold' : 'border-gray-200 bg-slate-50 text-gray-700'}">
+                <label class="flex items-center gap-2 p-2.5 sm:p-3 rounded-xl border cursor-pointer transition-all ${inv.taxMode === 'gst-inter' ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 font-semibold' : 'border-gray-200 bg-slate-50 text-gray-700'}">
                   <input type="radio" name="taxMode" value="gst-inter" ${inv.taxMode === 'gst-inter' ? 'checked' : ''} class="text-indigo-600 focus:ring-indigo-500" />
                   <span class="text-xs">GST (IGST)</span>
                 </label>
@@ -385,10 +385,10 @@ export class InvoiceEditor {
                 <label class="block text-xs font-semibold text-gray-700 mb-1">Amount Already Paid (Deposit)</label>
                 <input type="number" id="amountPaid" min="0" step="any" value="${inv.amountPaid || 0}" placeholder="0" class="w-full px-3 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none" />
               </div>
-              <div class="flex items-center pt-5">
+              <div class="flex items-center pt-2 sm:pt-5">
                 <label class="flex items-center gap-2 cursor-pointer text-xs text-gray-700 select-none">
                   <input type="checkbox" id="autoRoundOffCheck" ${inv.autoRoundOff ? 'checked' : ''} class="rounded text-indigo-600 focus:ring-indigo-500" />
-                  <span>Auto round-off total amount to nearest integer</span>
+                  <span>Auto round-off total to nearest integer</span>
                 </label>
               </div>
             </div>
@@ -396,7 +396,7 @@ export class InvoiceEditor {
         </div>
 
         <!-- SECTION 6: PAYMENT & BANK DETAILS -->
-        <div class="bg-white rounded-2xl p-6 border border-gray-200/80 shadow-sm transition-all hover:border-gray-300">
+        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
           <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
             <div class="flex items-center gap-2.5">
               <span class="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-sm">6</span>
@@ -483,7 +483,7 @@ export class InvoiceEditor {
         </div>
 
         <!-- SECTION 7: NOTES, TERMS & SIGNATURE -->
-        <div class="bg-white rounded-2xl p-6 border border-gray-200/80 shadow-sm transition-all hover:border-gray-300">
+        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
           <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
             <div class="flex items-center gap-2.5">
               <span class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-sm">7</span>

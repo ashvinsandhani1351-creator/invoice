@@ -22,19 +22,19 @@ export class SignaturePad {
 
   render() {
     this.container.innerHTML = `
-      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 hidden" id="sigModal">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
-          <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+      <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4 hidden" id="sigModal">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
+          <div class="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-gray-100 flex items-center justify-between">
             <div>
-              <h3 class="font-bold text-gray-900 text-lg">Add Digital Signature</h3>
-              <p class="text-xs text-gray-500">Draw with your mouse/touchscreen or upload a signature image</p>
+              <h3 class="font-bold text-gray-900 text-base sm:text-lg">Add Digital Signature</h3>
+              <p class="text-xs text-gray-500">Draw with your finger/touch or upload an image</p>
             </div>
-            <button type="button" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-100 transition-colors" id="sigCloseBtn">
+            <button type="button" class="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-gray-100 transition-colors touch-target" id="sigCloseBtn">
               <i data-lucide="x" class="w-5 h-5"></i>
             </button>
           </div>
 
-          <div class="p-6 space-y-4">
+          <div class="p-4 sm:p-6 space-y-4">
             <!-- Tabs -->
             <div class="flex border-b border-gray-200">
               <button type="button" class="py-2 px-4 text-xs font-semibold border-b-2 border-indigo-600 text-indigo-600 transition-all" id="sigTabDraw">
@@ -167,6 +167,7 @@ export class SignaturePad {
     };
 
     const startDraw = (e) => {
+      if (e.touches && e.cancelable) e.preventDefault();
       this.isDrawing = true;
       const pos = getPos(e);
       this.ctx.beginPath();
