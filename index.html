@@ -177,7 +177,7 @@
       <!-- Brand Logo & Positioning -->
       <div class="flex items-center gap-2 sm:gap-3 min-w-0">
         <a href="/" aria-label="invoicepdfgenerator Home" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200 hover:bg-indigo-700 transition-colors shrink-0">
-          <i data-lucide="receipt" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 sm:w-5 sm:h-5"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
         </a>
         <div class="min-w-0">
           <div class="flex items-center gap-1.5 sm:gap-2">
@@ -209,24 +209,24 @@
 
         <!-- Save Invoice Button -->
         <button type="button" id="historyBtn" aria-label="Save and view saved invoices" class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Save & View Saved Invoices">
-          <i data-lucide="bookmark-check" class="w-3.5 h-3.5 text-indigo-600"></i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-indigo-600"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/><path d="m9 10 2 2 4-4"/></svg>
           <span class="hidden xs:inline">Save</span>
         </button>
 
         <!-- New Invoice Button -->
         <button type="button" id="newInvoiceBtn" aria-label="Create new blank invoice" class="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Create New Invoice">
-          <i data-lucide="file-plus" class="w-3.5 h-3.5"></i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M9 15h6"/><path d="M12 12v6"/></svg>
           <span class="hidden sm:inline">New</span>
         </button>
 
         <!-- Print Button (Desktop only) -->
         <button type="button" id="printBtn" aria-label="Print invoice" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Print Invoice (Ctrl+P)">
-          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg> Print
         </button>
 
         <!-- Download PDF (Primary CTA) -->
         <button type="button" id="downloadPdfBtn" aria-label="Download invoice as PDF" class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-indigo-200 transition-all cursor-pointer">
-          <i data-lucide="download" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 sm:w-4 sm:h-4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
           <span>Download PDF</span>
         </button>
 
@@ -236,11 +236,11 @@
     <!-- Mobile Tab Selector (Edit Form vs Live Preview) -->
     <nav aria-label="Mobile View Switcher" class="lg:hidden px-3 py-1.5 bg-slate-100/90 border-t border-slate-200/80 flex gap-2">
       <button type="button" id="mobileTabEdit" aria-label="Switch to edit invoice form" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-white text-indigo-700 shadow-xs border border-slate-200/60 flex items-center justify-center gap-1.5 transition-all">
-        <i data-lucide="file-edit" class="w-3.5 h-3.5"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M4 13.5V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2h-5.5"/><polyline points="14 2 14 8 20 8"/><path d="M10.42 12.61a2.1 2.1 0 1 1 2.97 2.97L7.95 21 4 22l1-3.95 5.42-5.44Z"/></svg>
         <span>1. Edit Invoice</span>
       </button>
       <button type="button" id="mobileTabPreview" aria-label="Switch to live A4 preview" class="flex-1 py-2 px-3 rounded-lg text-xs font-medium text-slate-700 hover:text-slate-900 flex items-center justify-center gap-1.5 transition-all">
-        <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
         <span>2. Live Preview (A4)</span>
       </button>
     </nav>
@@ -281,12 +281,12 @@
               <span class="block text-xs font-semibold text-gray-700 mb-1">Company Logo (Optional)</span>
               <div class="flex items-center gap-4">
                 <div id="logoPreviewContainer" class="w-16 h-16 rounded-xl border border-gray-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0">
-                  <i data-lucide="image" class="w-6 h-6 text-gray-600"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-gray-600"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
                 </div>
                 <div class="flex-1 space-y-1">
                   <div class="flex items-center gap-2">
                     <button type="button" id="logoUploadBtn" aria-label="Upload company logo" class="px-3.5 py-1.5 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg text-xs font-medium text-gray-700 transition-colors shadow-sm inline-flex items-center gap-1.5">
-                      <i data-lucide="upload" class="w-3.5 h-3.5"></i> Upload Logo
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Upload Logo
                     </button>
                   </div>
                   <p class="text-[11px] text-gray-600">PNG, JPG, or SVG. Auto-sized for invoice header.</p>
@@ -368,7 +368,7 @@
             <!-- Progressive Shipping Address Toggle -->
             <div class="md:col-span-2">
               <button type="button" id="toggleShippingBtn" aria-label="Toggle separate shipping address" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1.5 touch-target">
-                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
                 + Add separate shipping address
               </button>
             </div>
@@ -408,7 +408,7 @@
               <div class="flex items-center justify-between mb-1">
                 <label for="invoiceNumber" class="text-xs font-semibold text-gray-700">Invoice Number</label>
                 <button type="button" id="nextNumberBtn" aria-label="Auto-increment invoice number" title="Auto-increment invoice number" class="text-[11px] text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center gap-0.5">
-                  <i data-lucide="plus" class="w-3 h-3"></i> Next #
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Next #
                 </button>
               </div>
               <input type="text" id="invoiceNumber" value="INV-001" class="w-full px-3.5 py-2 text-sm font-mono font-semibold text-gray-900 bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
@@ -478,10 +478,10 @@
                 <!-- Duplicate & Delete Actions -->
                 <div class="flex items-center gap-1 shrink-0">
                   <button type="button" data-action="duplicate" data-id="item_1" aria-label="Duplicate item #1" title="Duplicate Item" class="p-1.5 text-gray-600 hover:text-indigo-600 hover:bg-white rounded-lg transition-colors">
-                    <i data-lucide="copy" class="w-4 h-4"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
                   </button>
                   <button type="button" data-action="delete" data-id="item_1" aria-label="Delete item #1" title="Delete Item" class="p-1.5 text-gray-600 hover:text-rose-600 hover:bg-white rounded-lg transition-colors">
-                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
                   </button>
                 </div>
               </div>
@@ -519,7 +519,7 @@
           <!-- Add Item Button -->
           <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
             <button type="button" id="addItemBtn" aria-label="Add new line item" class="px-4 py-2.5 bg-indigo-50 hover:bg-indigo-100 active:bg-indigo-200 text-indigo-700 rounded-xl font-bold text-xs transition-colors inline-flex items-center gap-2 touch-target">
-              <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Line Item
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg> Add Line Item
             </button>
             <span class="text-xs text-gray-600 font-medium">1 item</span>
           </div>
@@ -702,7 +702,7 @@
                     </span>
                     <div class="flex items-center gap-3">
                       <label class="flex-1 px-3 py-2 bg-white hover:bg-slate-100 border border-gray-200 border-dashed rounded-xl cursor-pointer flex items-center justify-center gap-2 text-xs font-semibold text-indigo-600 transition-colors">
-                        <i data-lucide="qr-code" class="w-4 h-4"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>
                         <span>Upload QR Image (PNG/JPG)</span>
                         <input type="file" id="customQrInput" aria-label="Choose custom QR image file" accept="image/*" class="hidden" />
                       </label>
@@ -750,7 +750,7 @@
 
               <div class="flex items-center gap-3">
                 <button type="button" id="openSigBtn" aria-label="Add or change digital signature" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-gray-700 rounded-xl font-semibold text-xs transition-colors inline-flex items-center gap-1.5 shadow-sm">
-                  <i data-lucide="pen-tool" class="w-3.5 h-3.5"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
                   Add Signature
                 </button>
               </div>
@@ -771,7 +771,7 @@
   </main>
 
   <!-- IN-DEPTH SEO ARTICLE & USER GUIDE (CRAWLABLE CONTENT) -->
-  <article class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-slate-800 border-t border-slate-200/80 no-print space-y-12">
+  <article style="content-visibility: auto; contain-intrinsic-size: 1000px;" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-slate-800 border-t border-slate-200/80 no-print space-y-12">
     
     <!-- Hero Title & Overview -->
     <header class="text-center space-y-4 max-w-3xl mx-auto">
@@ -941,11 +941,11 @@
   <!-- MOBILE FLOATING ACTION BAR -->
   <div id="mobileActionBar" class="lg:hidden fixed bottom-0 left-0 right-0 p-2.5 px-3 bg-white/95 backdrop-blur-md border-t border-slate-200 z-30 flex items-center justify-between gap-2 shadow-lg no-print">
     <button type="button" id="mobileTogglePreviewBtn" aria-label="Toggle between edit form and live A4 preview" class="py-2.5 px-3.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 rounded-xl font-bold text-xs flex items-center gap-1.5 border border-slate-200/80 transition-colors shrink-0">
-      <i data-lucide="eye" class="w-4 h-4 text-indigo-600"></i>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-indigo-600"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
       <span id="mobileToggleText">View A4</span>
     </button>
     <button type="button" id="mobileDownloadPdfBtn" aria-label="Download invoice as PDF" class="flex-1 py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white rounded-xl font-bold text-xs shadow-md shadow-indigo-200 flex items-center justify-center gap-2 transition-all">
-      <i data-lucide="download" class="w-4 h-4"></i> Download Free PDF
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Download Free PDF
     </button>
   </div>
 
@@ -987,7 +987,7 @@
   <div id="printContainer" class="hidden"></div>
 
   <!-- FOOTER -->
-  <footer class="mt-auto py-12 bg-white border-t border-slate-200 text-xs text-slate-600 no-print">
+  <footer style="content-visibility: auto; contain-intrinsic-size: 300px;" class="mt-auto py-12 bg-white border-t border-slate-200 text-xs text-slate-600 no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
       
       <!-- Key Features Badge Bar -->
