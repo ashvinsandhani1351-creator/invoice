@@ -18,10 +18,20 @@
   <meta property="og:title" content="Free GST Invoice Generator India – Create & Download GST Bills | invoicepdfgenerator" />
   <meta property="og:description" content="Generate compliant Indian GST tax invoices with automatic CGST, SGST, IGST calculations, HSN/SAC codes, and UPI QR code payments with invoicepdfgenerator. Free PDF download." />
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Preconnect & Asynchronous Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" />
+  </noscript>
+
+  <!-- Static Tailwind CSS & Custom Styles (Zero Runtime Overhead) -->
+  <link rel="stylesheet" href="css/tailwind.min.css" />
   <link rel="stylesheet" href="css/styles.css" />
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Deferred Vendor Scripts -->
+  <script defer src="js/vendor/lucide.min.js"></script>
 
   <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
@@ -198,7 +208,9 @@
   </footer>
 
   <script>
-    if (window.lucide) window.lucide.createIcons();
+    window.addEventListener("DOMContentLoaded", () => {
+      if (window.lucide) window.lucide.createIcons();
+    });
   </script>
 </body>
 </html>

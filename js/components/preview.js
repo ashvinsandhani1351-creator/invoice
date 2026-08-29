@@ -87,9 +87,9 @@ export class InvoicePreview {
         <div class="bg-white rounded-2xl p-3 border border-gray-200 shadow-sm mb-3 flex flex-wrap items-center justify-between gap-2.5 text-xs no-print">
           
           <!-- Template Selector Pills (Horizontal scroll on mobile) -->
-          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl overflow-x-auto max-w-full">
+          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl overflow-x-auto max-w-full" role="tablist" aria-label="Invoice Templates">
             ${TEMPLATES.map(t => `
-              <button type="button" data-template="${t.id}" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all touch-target ${inv.template === t.id ? 'bg-white text-indigo-700 font-bold shadow-xs' : 'text-gray-600 hover:text-gray-900'}">
+              <button type="button" role="tab" aria-selected="${inv.template === t.id}" aria-label="Select ${t.name} template" data-template="${t.id}" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all touch-target ${inv.template === t.id ? 'bg-white text-indigo-700 font-bold shadow-xs' : 'text-gray-700 hover:text-gray-900'}">
                 ${t.name}
               </button>
             `).join('')}
@@ -97,27 +97,27 @@ export class InvoicePreview {
 
           <!-- Color Palette Picker -->
           <div class="flex items-center gap-1.5 shrink-0">
-            <span class="text-gray-400 font-medium hidden sm:inline">Theme:</span>
+            <span class="text-gray-600 font-medium hidden sm:inline">Theme:</span>
             <div class="flex items-center gap-1">
               ${BRAND_COLORS.map(c => `
-                <button type="button" data-color="${c.hex}" title="${c.name}" class="w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 touch-target ${inv.brandColor === c.hex ? 'border-gray-900 scale-110 shadow-xs' : 'border-white'}" style="background-color: ${c.hex};"></button>
+                <button type="button" data-color="${c.hex}" title="${c.name}" aria-label="Theme color ${c.name}" class="w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 touch-target ${inv.brandColor === c.hex ? 'border-gray-900 scale-110 shadow-xs' : 'border-white'}" style="background-color: ${c.hex};"></button>
               `).join('')}
               <label class="w-6 h-6 rounded-full border border-gray-300 relative cursor-pointer overflow-hidden flex items-center justify-center bg-gradient-to-tr from-rose-400 via-purple-400 to-indigo-400 shrink-0" title="Custom Color">
-                <input type="color" id="customColorPicker" value="${inv.brandColor || '#4F46E5'}" class="opacity-0 absolute inset-0 cursor-pointer w-full h-full" />
+                <input type="color" id="customColorPicker" aria-label="Choose custom theme color" value="${inv.brandColor || '#4F46E5'}" class="opacity-0 absolute inset-0 cursor-pointer w-full h-full" />
               </label>
             </div>
           </div>
 
           <!-- Zoom Controls -->
-          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-gray-600 ml-auto shrink-0">
-            <button type="button" id="zoomOutBtn" class="p-1 hover:text-gray-900 rounded hover:bg-white transition-colors" title="Zoom Out">
+          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-gray-700 ml-auto shrink-0">
+            <button type="button" id="zoomOutBtn" aria-label="Zoom out preview" class="p-1 hover:text-gray-900 rounded hover:bg-white transition-colors" title="Zoom Out">
               <i data-lucide="minus" class="w-3.5 h-3.5"></i>
             </button>
             <span class="px-1.5 font-mono font-medium text-[11px] min-w-[36px] text-center" id="zoomText">${Math.round(this.zoomLevel * 100)}%</span>
-            <button type="button" id="zoomInBtn" class="p-1 hover:text-gray-900 rounded hover:bg-white transition-colors" title="Zoom In">
+            <button type="button" id="zoomInBtn" aria-label="Zoom in preview" class="p-1 hover:text-gray-900 rounded hover:bg-white transition-colors" title="Zoom In">
               <i data-lucide="plus" class="w-3.5 h-3.5"></i>
             </button>
-            <button type="button" id="zoomFitBtn" class="px-2 py-0.5 hover:text-gray-900 rounded hover:bg-white text-[10px] font-bold bg-white text-indigo-700 shadow-2xs transition-colors">
+            <button type="button" id="zoomFitBtn" aria-label="Fit invoice preview to screen width" class="px-2 py-0.5 hover:text-gray-900 rounded hover:bg-white text-[10px] font-bold bg-white text-indigo-700 shadow-2xs transition-colors">
               Fit Screen
             </button>
           </div>

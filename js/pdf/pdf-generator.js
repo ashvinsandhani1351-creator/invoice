@@ -1,11 +1,59 @@
 /**
  * Client-side High-Fidelity PDF Generator
  * Renders invoices cleanly in an isolated offscreen A4 container with full mobile browser support (iOS Safari & Android Chrome)
+ * Uses on-demand dynamic loading for heavy dependencies (html2canvas & jsPDF) to maximize PageSpeed scores
  */
 
 import { renderInvoiceTemplate } from '../templates/index.js';
 import { calculateInvoice } from '../engine/calculator.js';
 import { generateQRCodeDataUrl, buildUPIUri } from './upi-qr.js';
+
+/**
+ * Lazy loads html2canvas and jsPDF on-demand to avoid render-blocking the initial page load
+ */
+export async function loadPdfLibraries() {
+  if (typeof window.html2canvas !== 'undefined' && typeof window.jspdf !== 'undefined') {
+    return true;
+  }
+
+  const loadScript = (src) => new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      if (existing.dataset.loaded === 'true') return resolve();
+      existing.addEventListener('load', resolve);
+      existing.addEventListener('error', reject);
+      return;
+    }
+    const s = document.createElement('script');
+    s.src = src;
+    s.async = true;
+    s.onload = () => {
+      s.dataset.loaded = 'true';
+      resolve();
+    };
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+
+  await Promise.all([
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
+  ]);
+  return true;
+}
+
+// Prefetch during idle time in background without impacting initial FCP / LCP
+if (typeof window !== 'undefined') {
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(() => {
+      loadPdfLibraries().catch(() => {});
+    });
+  } else {
+    setTimeout(() => {
+      loadPdfLibraries().catch(() => {});
+    }, 2000);
+  }
+}
 
 /**
  * Sanitizes a filename for download
@@ -64,6 +112,9 @@ export async function downloadInvoicePDF(_ignoredElement, invoice, qrCodeUrl = '
   if (!invoice) {
     throw new Error('Invoice data is required');
   }
+
+  // Ensure html2canvas and jspdf are ready
+  await loadPdfLibraries();
 
   // Fallback to browser print if external libraries are missing
   if (typeof window.html2canvas === 'undefined' || typeof window.jspdf === 'undefined') {
