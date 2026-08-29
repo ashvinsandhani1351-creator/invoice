@@ -19,7 +19,12 @@ export class InvoiceEditor {
   init(invoice) {
     this.invoice = invoice;
     this.showShipping = !!(invoice.customer?.shippingAddress && !invoice.customer?.sameAsBilling);
-    this.render();
+    const hasPreRenderedContent = this.container && this.container.children.length > 0;
+    
+    // Only re-render if there is saved draft data differing from default, or if container is empty
+    if (!hasPreRenderedContent || (invoice.seller?.name || invoice.customer?.name)) {
+      this.render();
+    }
     this.bindEvents();
   }
 
