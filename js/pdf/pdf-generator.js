@@ -1,7 +1,7 @@
 /**
  * Client-side High-Fidelity PDF Generator
  * Renders invoices cleanly in an isolated offscreen A4 container with full mobile browser support (iOS Safari & Android Chrome)
- * Uses on-demand dynamic loading for heavy dependencies (html2canvas & jsPDF) to maximize PageSpeed scores
+ * Uses on-demand dynamic loading for dependencies (local vendor scripts with CDN fallback) to maximize PageSpeed scores
  */
 
 import { renderInvoiceTemplate } from '../templates/index.js';
@@ -20,7 +20,10 @@ export async function loadPdfLibraries() {
     const existing = document.querySelector(`script[src="${src}"]`);
     if (existing) {
       if (existing.dataset.loaded === 'true') return resolve();
-      existing.addEventListener('load', resolve);
+      existing.addEventListener('load', () => {
+        existing.dataset.loaded = 'true';
+        resolve();
+      });
       existing.addEventListener('error', reject);
       return;
     }
@@ -35,10 +38,19 @@ export async function loadPdfLibraries() {
     document.head.appendChild(s);
   });
 
-  await Promise.all([
-    loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
-    loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
-  ]);
+  try {
+    // Try local high-speed edge cached vendor scripts first
+    await Promise.all([
+      loadScript('js/vendor/html2canvas.min.js'),
+      loadScript('js/vendor/jspdf.umd.min.js')
+    ]);
+  } catch (localErr) {
+    console.warn('Local vendor scripts failed, attempting CDN fallback...', localErr);
+    await Promise.all([
+      loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
+      loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
+    ]);
+  }
   return true;
 }
 
@@ -71,33 +83,38 @@ function sanitizeFilename(name) {
  */
 function savePdfFile(doc, filename) {
   try {
-    const pdfBlob = doc.output('blob');
-    const blobUrl = URL.createObjectURL(pdfBlob);
-
-    const isIOS = typeof navigator !== 'undefined' && (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream);
-
-    const link = document.createElement('a');
-    link.href = blobUrl;
-    link.download = filename;
-    if (isIOS) {
-      link.target = '_blank';
-      link.rel = 'noopener';
-    }
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-
-    setTimeout(() => {
-      if (link.parentNode) {
-        link.parentNode.removeChild(link);
-      }
-      URL.revokeObjectURL(blobUrl);
-    }, 10000);
-    return true;
-  } catch (err) {
-    console.warn('Custom blob download failed, falling back to doc.save:', err);
+    // 1. Direct jsPDF save (handles Desktop Chrome/Firefox/Edge and iOS/Android download triggers)
     doc.save(filename);
     return true;
+  } catch (err) {
+    console.warn('doc.save failed, falling back to Blob download:', err);
+    try {
+      const pdfBlob = doc.output('blob');
+      const blobUrl = URL.createObjectURL(pdfBlob);
+      const isIOS = typeof navigator !== 'undefined' && (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream);
+
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = filename;
+      if (isIOS) {
+        link.target = '_blank';
+        link.rel = 'noopener';
+      }
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+
+      setTimeout(() => {
+        if (link.parentNode) {
+          link.parentNode.removeChild(link);
+        }
+        URL.revokeObjectURL(blobUrl);
+      }, 8000);
+      return true;
+    } catch (blobErr) {
+      console.error('Blob fallback error:', blobErr);
+      throw blobErr;
+    }
   }
 }
 
@@ -142,26 +159,26 @@ export async function downloadInvoicePDF(_ignoredElement, invoice, qrCodeUrl = '
     const templateHtml = renderInvoiceTemplate(invoice, calculations, finalQrCodeUrl);
 
     // 3. Create isolated offscreen container with exact standard A4 width (794px at 96 DPI)
-    // Using position:fixed, top:0, left:0, opacity:0.01 so mobile WebKit renders it in the DOM tree
+    // Placed offscreen (left: -9999px) with full opacity: 1 so html2canvas renders solid colors
     tempContainer = document.createElement('div');
     tempContainer.id = 'pdf-render-temp-container';
     tempContainer.style.cssText = `
       position: fixed !important;
       top: 0 !important;
-      left: 0 !important;
+      left: -9999px !important;
       width: 794px !important;
       min-height: 1123px !important;
       max-width: 794px !important;
       background-color: #ffffff !important;
-      z-index: -9999 !important;
-      pointer-events: none !important;
-      opacity: 0.01 !important;
+      opacity: 1 !important;
       display: block !important;
       visibility: visible !important;
       box-sizing: border-box !important;
       margin: 0 !important;
       padding: 0 !important;
       transform: none !important;
+      z-index: 99999 !important;
+      pointer-events: none !important;
     `;
     tempContainer.innerHTML = templateHtml;
     document.body.appendChild(tempContainer);
@@ -175,22 +192,28 @@ export async function downloadInvoicePDF(_ignoredElement, invoice, qrCodeUrl = '
       await document.fonts.ready;
     }
 
-    // Wait for any embedded images (logo, QR, signature) to load
+    // Wait for any embedded images (logo, QR, signature) to load (with 1.5s timeout safety)
     const images = tempContainer.querySelectorAll('img');
     if (images.length > 0) {
-      await Promise.all(Array.from(images).map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise(resolve => {
-          img.onload = resolve;
-          img.onerror = resolve;
-        });
-      }));
+      await Promise.race([
+        Promise.all(Array.from(images).map(img => {
+          if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+          return new Promise(resolve => {
+            img.onload = resolve;
+            img.onerror = resolve;
+          });
+        })),
+        new Promise(resolve => setTimeout(resolve, 1500))
+      ]);
     }
+
+    // Brief 50ms tick to allow browser layout engine to finalize geometry
+    await new Promise(resolve => setTimeout(resolve, 50));
 
     // 5. Render canvas via html2canvas with mobile-optimized settings
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     const canvas = await window.html2canvas(tempContainer, {
-      scale: isMobile ? 1.5 : 2, // 1.5x on mobile prevents iOS WebKit memory crash while keeping crisp 300 DPI clarity
+      scale: isMobile ? 1.5 : 2,
       useCORS: true,
       allowTaint: true,
       logging: false,
@@ -198,7 +221,7 @@ export async function downloadInvoicePDF(_ignoredElement, invoice, qrCodeUrl = '
       x: 0,
       y: 0,
       width: 794,
-      height: tempContainer.offsetHeight || 1123,
+      height: tempContainer.scrollHeight || 1123,
       windowWidth: 794,
       windowHeight: 1123,
       scrollX: 0,
@@ -249,41 +272,4 @@ export async function downloadInvoicePDF(_ignoredElement, invoice, qrCodeUrl = '
       tempContainer.parentNode.removeChild(tempContainer);
     }
   }
-}
-
-/**
- * Triggers native browser print dialog strictly formatted on 1 A4 page
- * @param {Object} invoice
- * @param {string} [qrCodeUrl]
- */
-export async function printInvoice(invoice, qrCodeUrl = '') {
-  let printContainer = document.getElementById('printContainer');
-  if (!printContainer) {
-    printContainer = document.createElement('div');
-    printContainer.id = 'printContainer';
-    document.body.appendChild(printContainer);
-  }
-
-  if (invoice) {
-    let finalQrCodeUrl = qrCodeUrl;
-    if (!finalQrCodeUrl && invoice.bankDetails?.showQr) {
-      if (invoice.bankDetails?.customQrImage) {
-        finalQrCodeUrl = invoice.bankDetails.customQrImage;
-      } else if (invoice.bankDetails?.upiId) {
-        const calcs = calculateInvoice(invoice);
-        const uri = buildUPIUri(invoice.bankDetails.upiId, invoice.seller?.name, calcs.grandTotal, invoice.invoiceNumber);
-        finalQrCodeUrl = await generateQRCodeDataUrl(uri, 180);
-      }
-    }
-
-    const calculations = calculateInvoice(invoice);
-    const templateHtml = renderInvoiceTemplate(invoice, calculations, finalQrCodeUrl);
-    printContainer.innerHTML = templateHtml;
-
-    if (window.lucide) {
-      window.lucide.createIcons({ root: printContainer });
-    }
-  }
-
-  window.print();
 }
