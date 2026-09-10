@@ -1,5 +1,7 @@
 /* Custom styles & Print Engine for Free Online Invoice Generator */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
 :root {
   --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Plus Jakarta Sans', var(--font-sans);
@@ -12,7 +14,6 @@ body {
   color: #1e293b;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-tap-highlight-color: transparent;
 }
 
 h1, h2, h3, .font-display {
@@ -42,60 +43,22 @@ h1, h2, h3, .font-display {
   background: #94a3b8;
 }
 
-/* 📱 MOBILE RESPONSIVENESS & TOUCH OPTIMIZATIONS */
-
-/* Prevent iOS Safari from auto-zooming on focus while keeping clean native feel */
-@media (max-width: 768px) {
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="number"],
-  input[type="date"],
-  select,
-  textarea {
-    font-size: 16px !important;
-  }
-}
-
-/* A4 Sheet Dimensions (210mm x 297mm / 794px x 1123px at 96 DPI) */
+/* A4 Sheet Dimensions (210mm x 297mm) */
 .invoice-a4-sheet {
-  width: 794px;
-  min-height: 1123px;
-  max-width: 794px;
+  width: 210mm;
+  min-height: 297mm;
+  max-width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
   background: #ffffff;
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Preview container wrapping scaled A4 sheet on mobile and desktop */
-.preview-viewport {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  overflow-x: auto;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 12px;
-}
-
-@media (min-width: 640px) {
-  .preview-viewport {
-    padding: 24px;
+@media (max-width: 1024px) {
+  .invoice-a4-sheet {
+    width: 100%;
+    min-height: auto;
   }
-}
-
-/* Scaling wrapper for responsive preview on all screen widths */
-.sheet-scaler {
-  transform-origin: top center;
-  transition: transform 0.15s ease-out;
-  margin-bottom: 24px;
-}
-
-/* Mobile tap targets & active feedback */
-.touch-target {
-  min-height: 44px;
-  min-width: 44px;
 }
 
 /* STRICT SINGLE A4 PAGE PRINT ENGINE */

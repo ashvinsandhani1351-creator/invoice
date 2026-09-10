@@ -105,8 +105,7 @@ export function createDefaultInvoice() {
       ifsc: '',
       swift: '',
       upiId: '',
-      showQr: true,
-      customQrImage: ''
+      showQr: true
     },
     
     // Notes & Signature

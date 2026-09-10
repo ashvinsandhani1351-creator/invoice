@@ -162,44 +162,72 @@
   }
   </script>
 
-    <link rel="stylesheet" href="css/app.min.css?v=2.5.0" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    }
+  </script>
 
-  <!-- Deferred Vendor Scripts -->
-  <script defer src="js/vendor/lucide.min.js"></script>
-  <script defer src="js/vendor/qrcode.min.js"></script>
+  <!-- Google Fonts & Custom Styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- jsPDF & html2canvas for Vector/A4 PDF Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- QRCode Library for UPI Instant Payments -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
 
   <!-- TOP APP BAR -->
   <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs no-print">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       
       <!-- Brand Logo & Positioning -->
-      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-        <a href="/" aria-label="invoicepdfgenerator Home" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200 hover:bg-indigo-700 transition-colors shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 sm:w-5 sm:h-5"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
+      <div class="flex items-center gap-3">
+        <a href="/" class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-200 hover:bg-indigo-700 transition-colors">
+          <i data-lucide="receipt" class="w-5 h-5"></i>
         </a>
-        <div class="min-w-0">
-          <div class="flex items-center gap-1.5 sm:gap-2">
-            <a href="/" class="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight font-display hover:text-indigo-600 transition-colors lowercase truncate">invoicepdfgenerator</a>
-            <span class="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 tracking-wide uppercase">Free</span>
+        <div>
+          <div class="flex items-center gap-2">
+            <a href="/" class="font-extrabold text-lg text-slate-900 tracking-tight font-display hover:text-indigo-600 transition-colors lowercase">invoicepdfgenerator</a>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 tracking-wide uppercase">Free • No Watermark</span>
           </div>
-          <p class="text-[11px] text-slate-600 hidden md:block">Create professional invoices in seconds. No signup.</p>
+          <p class="text-[11px] text-slate-500 hidden sm:block">Create professional invoices in seconds. No signup.</p>
         </div>
       </div>
 
-      <!-- Center Privacy Badge (Desktop only) -->
-      <div class="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200/80">
+      <!-- Center Privacy & Auto-Save Badge -->
+      <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200/80">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span id="saveIndicator" class="text-[11px] text-slate-700 font-medium">100% Private & Local</span>
+        <span id="saveIndicator" class="text-[11px] text-slate-600 font-medium">100% Private & Local</span>
       </div>
 
       <!-- Right Action CTAs -->
-      <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+      <div class="flex items-center gap-2 sm:gap-2.5">
         
-        <!-- Example Preset Dropdown (Hidden on tiny screens) -->
-        <div class="relative hidden md:block">
-          <select id="sampleInvoiceSelect" aria-label="Load sample invoice template" class="text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 py-2 px-2.5 rounded-xl border border-slate-200 transition-colors cursor-pointer outline-none">
+        <!-- See Example Preset Dropdown -->
+        <div class="relative hidden sm:block">
+          <select id="sampleInvoiceSelect" class="text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 py-2 px-2.5 rounded-xl border border-slate-200 transition-colors cursor-pointer outline-none">
             <option value="" disabled selected>✨ See Example...</option>
             <option value="gst_consulting">🇮🇳 Tech Consulting (GST + UPI)</option>
             <option value="freelancer_modern">🇺🇸 Freelancer Studio (USD)</option>
@@ -207,26 +235,24 @@
           </select>
         </div>
 
-        <!-- Save Invoice Button -->
-        <button type="button" id="historyBtn" aria-label="Save and view saved invoices" class="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Save & View Saved Invoices">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-indigo-600"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/><path d="m9 10 2 2 4-4"/></svg>
-          <span class="hidden xs:inline">Save</span>
+        <!-- History Button -->
+        <button type="button" id="historyBtn" class="p-2 text-slate-700 hover:bg-slate-100 rounded-xl transition-colors relative" title="Saved Invoices History">
+          <i data-lucide="history" class="w-5 h-5"></i>
         </button>
 
         <!-- New Invoice Button -->
-        <button type="button" id="newInvoiceBtn" aria-label="Create new blank invoice" class="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Create New Invoice">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M9 15h6"/><path d="M12 12v6"/></svg>
-          <span class="hidden sm:inline">New</span>
+        <button type="button" id="newInvoiceBtn" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Create New Invoice">
+          <i data-lucide="file-plus" class="w-3.5 h-3.5"></i> New
         </button>
 
-        <!-- Print Button (Desktop only) -->
-        <button type="button" id="printBtn" aria-label="Print invoice" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Print Invoice (Ctrl+P)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg> Print
+        <!-- Print Button -->
+        <button type="button" id="printBtn" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200" title="Print Invoice (Ctrl+P)">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print
         </button>
 
         <!-- Download PDF (Primary CTA) -->
-        <button type="button" id="downloadPdfBtn" aria-label="Download invoice as PDF" class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-indigo-200 transition-all cursor-pointer">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 sm:w-4 sm:h-4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+        <button type="button" id="downloadPdfBtn" class="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white rounded-xl font-bold text-xs sm:text-sm shadow-md shadow-indigo-200 transition-all cursor-pointer">
+          <i data-lucide="download" class="w-4 h-4"></i>
           <span>Download PDF</span>
         </button>
 
@@ -234,943 +260,201 @@
     </div>
 
     <!-- Mobile Tab Selector (Edit Form vs Live Preview) -->
-    <nav aria-label="Mobile View Switcher" class="lg:hidden px-3 py-1.5 bg-slate-100/90 border-t border-slate-200/80 flex gap-2">
-      <button type="button" id="mobileTabEdit" aria-label="Switch to edit invoice form" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-white text-indigo-700 shadow-xs border border-slate-200/60 flex items-center justify-center gap-1.5 transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M4 13.5V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2h-5.5"/><polyline points="14 2 14 8 20 8"/><path d="M10.42 12.61a2.1 2.1 0 1 1 2.97 2.97L7.95 21 4 22l1-3.95 5.42-5.44Z"/></svg>
-        <span>1. Edit Invoice</span>
+    <div class="lg:hidden px-4 pb-2 pt-1 border-t border-slate-100 flex gap-2">
+      <button type="button" id="mobileTabEdit" class="flex-1 py-2 rounded-lg text-xs font-bold bg-white text-indigo-700 shadow-sm border border-slate-200/60">
+        ✏️ Edit Invoice
       </button>
-      <button type="button" id="mobileTabPreview" aria-label="Switch to live A4 preview" class="flex-1 py-2 px-3 rounded-lg text-xs font-medium text-slate-700 hover:text-slate-900 flex items-center justify-center gap-1.5 transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-        <span>2. Live Preview (A4)</span>
+      <button type="button" id="mobileTabPreview" class="flex-1 py-2 rounded-lg text-xs font-medium text-slate-500 hover:text-slate-900">
+        👁️ Live Preview
       </button>
-    </nav>
+    </div>
   </header>
 
-  <!-- MAIN APP CONTAINER (SPLIT SCREEN ON DESKTOP, TABBED ON MOBILE) -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 pb-32 lg:pb-8">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+  <!-- MAIN APP CONTAINER (SPLIT SCREEN ON DESKTOP) -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
       <!-- LEFT: FORM EDITOR (7 COLS ON DESKTOP) -->
-      <section aria-label="Invoice Form Editor" id="editorColumn" class="lg:col-span-6 xl:col-span-6 editor-container w-full">
-        <div id="editorContainer">
-      <div class="space-y-6 pb-24 lg:pb-12 text-gray-800">
-        
-        <!-- SECTION 1: YOUR BUSINESS -->
-        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
-          <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-            <div class="flex items-center gap-2.5">
-              <span class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">1</span>
-              <div>
-                <h3 class="font-bold text-gray-900 text-base">Your Business Details</h3>
-                <p class="text-xs text-gray-600">Seller information displayed at the top of the invoice</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Business Name -->
-            <div class="md:col-span-2">
-              <label for="sellerName" class="block text-xs font-semibold text-gray-700 mb-1">
-                Business / Freelancer Name <span class="text-rose-500">*</span>
-              </label>
-              <input type="text" id="sellerName" value="" placeholder="e.g. Acme Creative Studio or John Doe" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all" />
-            </div>
-
-            <!-- Logo Upload & Preview -->
-            <div class="md:col-span-2">
-              <span class="block text-xs font-semibold text-gray-700 mb-1">Company Logo (Optional)</span>
-              <div class="flex items-center gap-4">
-                <div id="logoPreviewContainer" class="w-16 h-16 rounded-xl border border-gray-200 bg-slate-50 flex items-center justify-center overflow-hidden shrink-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-gray-600"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-                </div>
-                <div class="flex-1 space-y-1">
-                  <div class="flex items-center gap-2">
-                    <button type="button" id="logoUploadBtn" aria-label="Upload company logo" class="px-3.5 py-1.5 bg-white border border-gray-300 hover:bg-gray-50 rounded-lg text-xs font-medium text-gray-700 transition-colors shadow-sm inline-flex items-center gap-1.5">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Upload Logo
-                    </button>
-                  </div>
-                  <p class="text-[11px] text-gray-600">PNG, JPG, or SVG. Auto-sized for invoice header.</p>
-                  <input type="file" id="logoFileInput" aria-label="Choose company logo file" accept="image/*" class="hidden" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Email & Phone -->
-            <div>
-              <label for="sellerEmail" class="block text-xs font-semibold text-gray-700 mb-1">Email Address</label>
-              <input type="email" id="sellerEmail" value="" placeholder="billing@yourbusiness.com" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-            </div>
-            <div>
-              <label for="sellerPhone" class="block text-xs font-semibold text-gray-700 mb-1">Phone Number</label>
-              <input type="tel" id="sellerPhone" value="" placeholder="+1 (555) 000-0000 / +91 98765 43210" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-            </div>
-
-            <!-- Address -->
-            <div class="md:col-span-2">
-              <label for="sellerAddress" class="block text-xs font-semibold text-gray-700 mb-1">Business Address</label>
-              <textarea id="sellerAddress" rows="2" placeholder="Street Address, City, State, ZIP/Postal Code, Country" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none"></textarea>
-            </div>
-
-            <!-- GSTIN & PAN (Optional) -->
-            <div>
-              <label for="sellerGstin" class="block text-xs font-semibold text-gray-700 mb-1">
-                GSTIN / Tax ID <span class="text-gray-600 font-normal">(Optional)</span>
-              </label>
-              <input type="text" id="sellerGstin" value="" placeholder="e.g. 29AAAAA0000A1Z5" class="w-full px-3.5 py-2 text-sm font-mono uppercase bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-              <div id="sellerGstinFeedback" class="text-[11px] mt-1 text-rose-500 hidden"></div>
-            </div>
-            <div>
-              <label for="sellerPan" class="block text-xs font-semibold text-gray-700 mb-1">
-                PAN / Business Reg <span class="text-gray-600 font-normal">(Optional)</span>
-              </label>
-              <input type="text" id="sellerPan" value="" placeholder="e.g. ABCDE1234F" class="w-full px-3.5 py-2 text-sm font-mono uppercase bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION 2: CUSTOMER DETAILS -->
-        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
-          <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-            <div class="flex items-center gap-2.5">
-              <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">2</span>
-              <div>
-                <h3 class="font-bold text-gray-900 text-base">Customer / Client Details</h3>
-                <p class="text-xs text-gray-600">Who is this invoice being billed to?</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Client Name -->
-            <div class="md:col-span-2">
-              <label for="customerName" class="block text-xs font-semibold text-gray-700 mb-1">
-                Client / Company Name <span class="text-rose-500">*</span>
-              </label>
-              <input type="text" id="customerName" value="" placeholder="e.g. Wayne Enterprises / Jane Smith" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all" />
-            </div>
-
-            <!-- Email & Phone -->
-            <div>
-              <label for="customerEmail" class="block text-xs font-semibold text-gray-700 mb-1">Client Email</label>
-              <input type="email" id="customerEmail" value="" placeholder="accounts@clientcompany.com" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-            </div>
-            <div>
-              <label for="customerPhone" class="block text-xs font-semibold text-gray-700 mb-1">Client Phone</label>
-              <input type="tel" id="customerPhone" value="" placeholder="+1 (555) 123-4567" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-            </div>
-
-            <!-- Billing Address -->
-            <div class="md:col-span-2">
-              <label for="customerAddress" class="block text-xs font-semibold text-gray-700 mb-1">Billing Address</label>
-              <textarea id="customerAddress" rows="2" placeholder="Client street address, city, state, zip" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none resize-none"></textarea>
-            </div>
-
-            <!-- Progressive Shipping Address Toggle -->
-            <div class="md:col-span-2">
-              <button type="button" id="toggleShippingBtn" aria-label="Toggle separate shipping address" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1.5 touch-target">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
-                + Add separate shipping address
-              </button>
-            </div>
-
-            <!-- Customer GSTIN (Optional) -->
-            <div>
-              <label for="customerGstin" class="block text-xs font-semibold text-gray-700 mb-1">
-                Client GSTIN <span class="text-gray-600 font-normal">(Optional)</span>
-              </label>
-              <input type="text" id="customerGstin" value="" placeholder="e.g. 29BBBBB0000B1Z6" class="w-full px-3.5 py-2 text-sm font-mono uppercase bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-              <div id="customerGstinFeedback" class="text-[11px] mt-1 text-rose-500 hidden"></div>
-            </div>
-            <div>
-              <label for="customerPan" class="block text-xs font-semibold text-gray-700 mb-1">
-                Client PAN <span class="text-gray-600 font-normal">(Optional)</span>
-              </label>
-              <input type="text" id="customerPan" value="" placeholder="e.g. BBBBB0000B" class="w-full px-3.5 py-2 text-sm font-mono uppercase bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION 3: INVOICE DETAILS & CURRENCY -->
-        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
-          <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-            <div class="flex items-center gap-2.5">
-              <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">3</span>
-              <div>
-                <h3 class="font-bold text-gray-900 text-base">Invoice Details</h3>
-                <p class="text-xs text-gray-600">Dates, numbering, and transaction currency</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <!-- Invoice Number -->
-            <div>
-              <div class="flex items-center justify-between mb-1">
-                <label for="invoiceNumber" class="text-xs font-semibold text-gray-700">Invoice Number</label>
-                <button type="button" id="nextNumberBtn" aria-label="Auto-increment invoice number" title="Auto-increment invoice number" class="text-[11px] text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center gap-0.5">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3 h-3"><path d="M5 12h14"/><path d="M12 5v14"/></svg> Next #
-                </button>
-              </div>
-              <input type="text" id="invoiceNumber" value="INV-001" class="w-full px-3.5 py-2 text-sm font-mono font-semibold text-gray-900 bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-            </div>
-
-            <!-- Currency Selector -->
-            <div>
-              <label for="invoiceCurrency" class="block text-xs font-semibold text-gray-700 mb-1">Currency</label>
-              <select id="invoiceCurrency" class="w-full px-3 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none font-medium cursor-pointer">
-                <option value="INR" selected>INR (₹) - Indian Rupee</option>
-                <option value="USD">USD ($) - US Dollar</option>
-                <option value="EUR">EUR (€) - Euro</option>
-                <option value="GBP">GBP (£) - British Pound</option>
-                <option value="AUD">AUD (A$) - Australian Dollar</option>
-                <option value="CAD">CAD (CA$) - Canadian Dollar</option>
-                <option value="SGD">SGD (S$) - Singapore Dollar</option>
-                <option value="AED">AED (AED) - UAE Dirham</option>
-                <option value="JPY">JPY (¥) - Japanese Yen</option>
-              </select>
-            </div>
-
-            <!-- Invoice Date -->
-            <div>
-              <label for="invoiceDate" class="block text-xs font-semibold text-gray-700 mb-1">Invoice Date</label>
-              <input type="date" id="invoiceDate" value="2026-08-29" class="w-full px-3 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-            </div>
-
-            <!-- Due Date -->
-            <div>
-              <label for="invoiceDueDate" class="block text-xs font-semibold text-gray-700 mb-1">Payment Due Date</label>
-              <input type="date" id="invoiceDueDate" value="2026-09-13" class="w-full px-3 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-            </div>
-
-            <!-- Purchase Order Number -->
-            <div class="sm:col-span-2">
-              <label for="poNumber" class="block text-xs font-semibold text-gray-700 mb-1">
-                Purchase Order (PO) # <span class="text-gray-600 font-normal">(Optional)</span>
-              </label>
-              <input type="text" id="poNumber" value="" placeholder="e.g. PO-2026-904" class="w-full px-3.5 py-2 text-sm font-mono bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none" />
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION 4: LINE ITEMS -->
-        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
-          <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-            <div class="flex items-center gap-2.5">
-              <span class="w-8 h-8 rounded-lg bg-violet-50 text-violet-600 flex items-center justify-center font-bold text-sm">4</span>
-              <div>
-                <h3 class="font-bold text-gray-900 text-base">Items & Services</h3>
-                <p class="text-xs text-gray-600">Add products, consulting fees, or deliverables</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Items Table -->
-          <div class="space-y-3" id="itemsListContainer">
-            <div class="p-4 bg-slate-50 hover:bg-slate-100/70 border border-gray-200 rounded-2xl transition-all space-y-3 item-row" data-id="item_1">
-              <div class="flex items-start justify-between gap-3">
-                <div class="flex items-center gap-2 flex-1">
-                  <span class="w-6 h-6 rounded-full bg-white border border-gray-200 text-gray-700 font-mono text-xs flex items-center justify-center font-bold shrink-0">
-                    1
-                  </span>
-                  <input type="text" data-field="description" aria-label="Item description #1" value="Web Design & UI Consulting" placeholder="Item description or service details..." class="w-full px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-medium" />
-                </div>
-
-                <!-- Duplicate & Delete Actions -->
-                <div class="flex items-center gap-1 shrink-0">
-                  <button type="button" data-action="duplicate" data-id="item_1" aria-label="Duplicate item #1" title="Duplicate Item" class="p-1.5 text-gray-600 hover:text-indigo-600 hover:bg-white rounded-lg transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                  </button>
-                  <button type="button" data-action="delete" data-id="item_1" aria-label="Delete item #1" title="Delete Item" class="p-1.5 text-gray-600 hover:text-rose-600 hover:bg-white rounded-lg transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Quantity, Rate, Unit & HSN Row -->
-              <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2.5 pt-1">
-                <div>
-                  <label class="block text-[10px] font-semibold text-gray-700 uppercase mb-0.5">HSN/SAC</label>
-                  <input type="text" data-field="hsn" aria-label="HSN or SAC code #1" value="998314" placeholder="998314" class="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" />
-                </div>
-
-                <div>
-                  <label class="block text-[10px] font-semibold text-gray-700 uppercase mb-0.5">Quantity</label>
-                  <input type="number" data-field="quantity" aria-label="Quantity #1" min="0.01" step="any" value="1" class="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" />
-                </div>
-
-                <div>
-                  <label class="block text-[10px] font-semibold text-gray-700 uppercase mb-0.5">Unit</label>
-                  <input type="text" data-field="unit" aria-label="Unit #1" value="hrs" placeholder="hrs / pcs / days" class="w-full px-2.5 py-1.5 text-xs bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" />
-                </div>
-
-                <div>
-                  <label class="block text-[10px] font-semibold text-gray-700 uppercase mb-0.5">Rate / Price</label>
-                  <input type="number" data-field="rate" aria-label="Rate #1" min="0" step="any" value="5000" class="w-full px-2.5 py-1.5 text-xs font-mono bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none" />
-                </div>
-
-                <div class="col-span-2 sm:col-span-1 text-right flex flex-col justify-end">
-                  <span class="text-[10px] text-gray-600 block uppercase">Line Total</span>
-                  <span class="text-xs font-mono font-bold text-gray-900">5000.00</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Add Item Button -->
-          <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
-            <button type="button" id="addItemBtn" aria-label="Add new line item" class="px-4 py-2.5 bg-indigo-50 hover:bg-indigo-100 active:bg-indigo-200 text-indigo-700 rounded-xl font-bold text-xs transition-colors inline-flex items-center gap-2 touch-target">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg> Add Line Item
-            </button>
-            <span class="text-xs text-gray-600 font-medium">1 item</span>
-          </div>
-        </div>
-
-        <!-- SECTION 5: DISCOUNTS, TAXES & CHARGES -->
-        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
-          <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-            <div class="flex items-center gap-2.5">
-              <span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">5</span>
-              <div>
-                <h3 class="font-bold text-gray-900 text-base">Taxes, Discounts & Charges</h3>
-                <p class="text-xs text-gray-600">Configure India GST, Single Tax/VAT, or discounts</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="space-y-4">
-            <!-- Tax Mode Radio Pills -->
-            <div>
-              <span class="block text-xs font-semibold text-gray-700 mb-2">Tax Calculation Mode</span>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                <label class="flex items-center gap-2 p-2.5 sm:p-3 rounded-xl border cursor-pointer transition-all border-gray-200 bg-slate-50 text-gray-700">
-                  <input type="radio" name="taxMode" value="none" class="text-indigo-600 focus:ring-indigo-500" />
-                  <span class="text-xs">No Tax</span>
-                </label>
-
-                <label class="flex items-center gap-2 p-2.5 sm:p-3 rounded-xl border cursor-pointer transition-all border-gray-200 bg-slate-50 text-gray-700">
-                  <input type="radio" name="taxMode" value="single" class="text-indigo-600 focus:ring-indigo-500" />
-                  <span class="text-xs">Single Tax / VAT</span>
-                </label>
-
-                <label class="flex items-center gap-2 p-2.5 sm:p-3 rounded-xl border cursor-pointer transition-all border-indigo-600 bg-indigo-50/50 text-indigo-900 font-semibold">
-                  <input type="radio" name="taxMode" value="gst-intra" checked class="text-indigo-600 focus:ring-indigo-500" />
-                  <span class="text-xs">GST (CGST+SGST)</span>
-                </label>
-
-                <label class="flex items-center gap-2 p-2.5 sm:p-3 rounded-xl border cursor-pointer transition-all border-gray-200 bg-slate-50 text-gray-700">
-                  <input type="radio" name="taxMode" value="gst-inter" class="text-indigo-600 focus:ring-indigo-500" />
-                  <span class="text-xs">GST (IGST)</span>
-                </label>
-              </div>
-            </div>
-
-            <!-- GST Rates -->
-            <div class="p-4 bg-indigo-50/40 rounded-xl border border-indigo-100 space-y-3">
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <!-- GST Rate -->
-                <div>
-                  <label for="gstRateSelect" class="block text-xs font-semibold text-gray-700 mb-1">GST Rate (%)</label>
-                  <select id="gstRateSelect" class="w-full px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer">
-                    <option value="0">0% (Exempt)</option>
-                    <option value="5">5% (2.5% + 2.5%)</option>
-                    <option value="12">12% (6% + 6%)</option>
-                    <option value="18" selected>18% (9% + 9%) - Standard</option>
-                    <option value="28">28% (14% + 14%)</option>
-                  </select>
-                </div>
-
-                <!-- Place of Supply -->
-                <div class="sm:col-span-2">
-                  <label for="placeOfSupplySelect" class="block text-xs font-semibold text-gray-700 mb-1">Place of Supply (State)</label>
-                  <select id="placeOfSupplySelect" class="w-full px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none cursor-pointer">
-                    <option value="01-Jammu & Kashmir">01-Jammu & Kashmir</option>
-                    <option value="07-Delhi">07-Delhi</option>
-                    <option value="24-Gujarat">24-Gujarat</option>
-                    <option value="27-Maharashtra">27-Maharashtra</option>
-                    <option value="29-Karnataka" selected>29-Karnataka</option>
-                    <option value="33-Tamil Nadu">33-Tamil Nadu</option>
-                    <option value="36-Telangana">36-Telangana</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Reverse Charge Checkbox -->
-              <div class="pt-1">
-                <label class="flex items-center gap-2 cursor-pointer text-xs text-gray-700 select-none">
-                  <input type="checkbox" id="reverseChargeCheck" aria-label="Reverse Charge Mechanism is applicable for this invoice" class="rounded text-indigo-600 focus:ring-indigo-500" />
-                  <span>Reverse Charge Mechanism (RCM) is applicable for this invoice</span>
-                </label>
-              </div>
-            </div>
-
-            <!-- Global Discount & Shipping Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-              <!-- Discount -->
-              <div class="sm:col-span-2">
-                <label for="discountValue" class="block text-xs font-semibold text-gray-700 mb-1">Invoice Discount</label>
-                <div class="flex gap-2">
-                  <input type="number" id="discountValue" min="0" step="any" value="0" placeholder="0" class="w-full px-3 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none" />
-                  <select id="discountType" aria-label="Discount type" class="px-3 py-2 text-xs font-semibold bg-slate-100 border border-gray-200 rounded-xl cursor-pointer">
-                    <option value="percentage" selected>% Percent</option>
-                    <option value="fixed">Fixed Amount</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Shipping Fee -->
-              <div>
-                <label for="shippingFee" class="block text-xs font-semibold text-gray-700 mb-1">Shipping / Extra Fee</label>
-                <input type="number" id="shippingFee" min="0" step="any" value="0" placeholder="0" class="w-full px-3 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none" />
-              </div>
-            </div>
-
-            <!-- Amount Paid & Auto Round Off -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-gray-100">
-              <div>
-                <label for="amountPaid" class="block text-xs font-semibold text-gray-700 mb-1">Amount Already Paid (Deposit)</label>
-                <input type="number" id="amountPaid" min="0" step="any" value="0" placeholder="0" class="w-full px-3 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none" />
-              </div>
-              <div class="flex items-center pt-2 sm:pt-5">
-                <label class="flex items-center gap-2 cursor-pointer text-xs text-gray-700 select-none">
-                  <input type="checkbox" id="autoRoundOffCheck" aria-label="Auto round-off total amount to nearest integer" class="rounded text-indigo-600 focus:ring-indigo-500" />
-                  <span>Auto round-off total to nearest integer</span>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION 6: PAYMENT & BANK DETAILS -->
-        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
-          <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-            <div class="flex items-center gap-2.5">
-              <span class="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center font-bold text-sm">6</span>
-              <div>
-                <h3 class="font-bold text-gray-900 text-base">Payment & Bank Details</h3>
-                <p class="text-xs text-gray-600">Provide bank wire or UPI QR for instant client settlement</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label for="bankName" class="block text-xs font-semibold text-gray-700 mb-1">Bank Name</label>
-              <input type="text" id="bankName" value="" placeholder="e.g. Chase Bank / HDFC Bank" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none" />
-            </div>
-
-            <div>
-              <label for="accountName" class="block text-xs font-semibold text-gray-700 mb-1">Account Holder Name</label>
-              <input type="text" id="accountName" value="" placeholder="e.g. Acme Studio LLC" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none" />
-            </div>
-
-            <div>
-              <label for="accountNumber" class="block text-xs font-semibold text-gray-700 mb-1">Account Number / IBAN</label>
-              <input type="text" id="accountNumber" value="" placeholder="e.g. 50200012345678" class="w-full px-3.5 py-2 text-sm font-mono bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none" />
-            </div>
-
-            <div>
-              <label for="ifscCode" class="block text-xs font-semibold text-gray-700 mb-1">IFSC Code / Routing / SWIFT</label>
-              <input type="text" id="ifscCode" value="" placeholder="e.g. HDFC0000240 / CHASUS33" class="w-full px-3.5 py-2 text-sm font-mono uppercase bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none" />
-            </div>
-
-            <!-- UPI ID & QR Code Option -->
-            <div class="md:col-span-2 pt-2 border-t border-gray-100 space-y-3">
-              <div class="flex items-center justify-between">
-                <label class="flex items-center gap-2 cursor-pointer text-xs text-gray-800 select-none">
-                  <input type="checkbox" id="showQrCheck" aria-label="Show UPI / Payment QR on Invoice" checked class="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
-                  <span class="font-bold">Show UPI / Payment QR on Invoice</span>
-                </label>
-                <span class="text-[11px] text-gray-600">Auto-generated or custom uploaded QR</span>
-              </div>
-
-              <div class="p-3.5 bg-slate-50 border border-indigo-100 rounded-xl space-y-3">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-                  
-                  <!-- Option 1: UPI ID for auto QR -->
-                  <div>
-                    <label for="upiId" class="block text-xs font-semibold text-gray-700 mb-1">
-                      Auto-Generate QR with UPI ID
-                    </label>
-                    <input type="text" id="upiId" value="" placeholder="e.g. yourname@oksbi or business@hdfcbank" class="w-full px-3.5 py-2 text-sm font-mono bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none" />
-                    <p class="text-[10px] text-gray-600 mt-1">Generates dynamic QR with amount & invoice number</p>
-                  </div>
-
-                  <!-- Option 2: Upload Custom QR image -->
-                  <div>
-                    <span class="block text-xs font-semibold text-gray-700 mb-1">
-                      Or Upload Custom QR Image
-                    </span>
-                    <div class="flex items-center gap-3">
-                      <label class="flex-1 px-3 py-2 bg-white hover:bg-slate-100 border border-gray-200 border-dashed rounded-xl cursor-pointer flex items-center justify-center gap-2 text-xs font-semibold text-indigo-600 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>
-                        <span>Upload QR Image (PNG/JPG)</span>
-                        <input type="file" id="customQrInput" aria-label="Choose custom QR image file" accept="image/*" class="hidden" />
-                      </label>
-                    </div>
-                    <p class="text-[10px] text-gray-600 mt-1">Upload merchant scanner from PhonePe, GPay, Paytm, BHIM</p>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION 7: NOTES, TERMS & SIGNATURE -->
-        <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200/80 shadow-xs transition-all hover:border-gray-300">
-          <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
-            <div class="flex items-center gap-2.5">
-              <span class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-sm">7</span>
-              <div>
-                <h3 class="font-bold text-gray-900 text-base">Notes, Terms & Signature</h3>
-                <p class="text-xs text-gray-600">Add payment instructions, legal terms, or digital signature</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Notes -->
-            <div>
-              <label for="invoiceNotes" class="block text-xs font-semibold text-gray-700 mb-1">Client Notes & Thank You Message</label>
-              <textarea id="invoiceNotes" rows="3" placeholder="Thank you for your business! Payment instructions..." class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none resize-none"></textarea>
-            </div>
-
-            <!-- Terms -->
-            <div>
-              <label for="invoiceTerms" class="block text-xs font-semibold text-gray-700 mb-1">Terms & Conditions</label>
-              <textarea id="invoiceTerms" rows="3" placeholder="1. Payment due within 15 days..." class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none resize-none"></textarea>
-            </div>
-
-            <!-- Digital Signature Block -->
-            <div class="md:col-span-2 pt-2 border-t border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div>
-                <div class="text-xs font-semibold text-gray-800">Authorized Digital Signature</div>
-                <div class="text-xs text-gray-600">Draw with touch/mouse or upload signature image</div>
-              </div>
-
-              <div class="flex items-center gap-3">
-                <button type="button" id="openSigBtn" aria-label="Add or change digital signature" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-gray-700 rounded-xl font-semibold text-xs transition-colors inline-flex items-center gap-1.5 shadow-sm">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
-                  Add Signature
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
+      <div id="editorColumn" class="lg:col-span-6 xl:col-span-6 editor-container">
+        <div id="editorContainer"></div>
       </div>
-</div>
-      </section>
 
       <!-- RIGHT: LIVE REAL-TIME A4 PREVIEW (5 COLS ON DESKTOP - STICKY) -->
-      <section aria-label="Live Invoice Preview" id="previewColumn" class="hidden lg:block lg:col-span-6 xl:col-span-6 lg:sticky lg:top-24 h-auto lg:h-[calc(100vh-7rem)] w-full">
-        <div id="previewContainer" class="h-full">
-      <div class="flex flex-col h-full">
-        <!-- Top Toolbar: Templates, Colors & Zoom -->
-        <div class="bg-white rounded-2xl p-3 border border-gray-200 shadow-sm mb-3 flex flex-wrap items-center justify-between gap-2.5 text-xs no-print">
-          
-          <!-- Template Selector Pills (Horizontal scroll on mobile) -->
-          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl overflow-x-auto max-w-full" role="tablist" aria-label="Invoice Templates">
-            
-              <button type="button" role="tab" aria-selected="false" aria-label="Select Minimal Clean template" data-template="minimal" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all text-gray-700 hover:text-gray-900">
-                Minimal Clean
-              </button>
-            
-              <button type="button" role="tab" aria-selected="true" aria-label="Select Professional Business template" data-template="professional" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all bg-white text-indigo-700 font-bold shadow-xs">
-                Professional Business
-              </button>
-            
-              <button type="button" role="tab" aria-selected="false" aria-label="Select Modern Creative template" data-template="modern" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all text-gray-700 hover:text-gray-900">
-                Modern Creative
-              </button>
-            
-          </div>
-
-          <!-- Color Palette Picker -->
-          <div class="flex items-center gap-1.5 shrink-0">
-            <span class="text-gray-600 font-medium hidden sm:inline text-xs">Theme:</span>
-            <div class="flex items-center gap-1">
-              
-                <button type="button" data-color="#4F46E5" title="Indigo" aria-label="Theme color Indigo" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 transition-transform hover:scale-110 cursor-pointer shadow-2xs border-gray-900 scale-110 shadow-xs" style="background-color: #4F46E5;"></button>
-              
-                <button type="button" data-color="#2563EB" title="Blue" aria-label="Theme color Blue" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 transition-transform hover:scale-110 cursor-pointer shadow-2xs border-white" style="background-color: #2563EB;"></button>
-              
-                <button type="button" data-color="#059669" title="Emerald" aria-label="Theme color Emerald" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 transition-transform hover:scale-110 cursor-pointer shadow-2xs border-white" style="background-color: #059669;"></button>
-              
-                <button type="button" data-color="#7C3AED" title="Violet" aria-label="Theme color Violet" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 transition-transform hover:scale-110 cursor-pointer shadow-2xs border-white" style="background-color: #7C3AED;"></button>
-              
-                <button type="button" data-color="#E11D48" title="Rose" aria-label="Theme color Rose" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 transition-transform hover:scale-110 cursor-pointer shadow-2xs border-white" style="background-color: #E11D48;"></button>
-              
-                <button type="button" data-color="#D97706" title="Amber" aria-label="Theme color Amber" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 transition-transform hover:scale-110 cursor-pointer shadow-2xs border-white" style="background-color: #D97706;"></button>
-              
-                <button type="button" data-color="#0891B2" title="Cyan" aria-label="Theme color Cyan" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 transition-transform hover:scale-110 cursor-pointer shadow-2xs border-white" style="background-color: #0891B2;"></button>
-              
-                <button type="button" data-color="#334155" title="Slate" aria-label="Theme color Slate" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 transition-transform hover:scale-110 cursor-pointer shadow-2xs border-white" style="background-color: #334155;"></button>
-              
-              <label class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-gray-300 relative cursor-pointer overflow-hidden flex items-center justify-center bg-gradient-to-tr from-rose-400 via-purple-400 to-indigo-400 shrink-0 shadow-2xs hover:scale-110 transition-transform" title="Custom Color">
-                <input type="color" id="customColorPicker" aria-label="Choose custom theme color" value="#4F46E5" class="opacity-0 absolute inset-0 cursor-pointer w-full h-full" />
-              </label>
-            </div>
-          </div>
-
-          <!-- Zoom Controls -->
-          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-gray-700 ml-auto shrink-0">
-            <button type="button" id="zoomOutBtn" aria-label="Zoom out preview" class="p-1 hover:text-gray-900 rounded hover:bg-white transition-colors" title="Zoom Out">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M5 12h14"/></svg>
-            </button>
-            <span class="px-1.5 font-mono font-medium text-[11px] min-w-[36px] text-center" id="zoomText">100%</span>
-            <button type="button" id="zoomInBtn" aria-label="Zoom in preview" class="p-1 hover:text-gray-900 rounded hover:bg-white transition-colors" title="Zoom In">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-            </button>
-            <button type="button" id="zoomFitBtn" aria-label="Fit invoice preview to screen width" class="px-2 py-0.5 hover:text-gray-900 rounded hover:bg-white text-[10px] font-bold bg-white text-indigo-700 shadow-2xs transition-colors">
-              Fit Screen
-            </button>
-          </div>
-
-        </div>
-
-        <!-- A4 Paper Viewport Container with Adaptive Scaling -->
-        <div class="flex-1 overflow-auto bg-slate-200/60 rounded-2xl p-2 sm:p-6 preview-viewport min-h-[480px] border border-gray-200/60" id="previewViewport">
-          <div id="scaledWrapper" style="width: 794px; height: 1147px; position: relative; overflow: visible; margin: 0 auto;">
-            <div id="invoiceRenderRoot" class="invoice-a4-sheet bg-white shadow-xl rounded-sm origin-top-left transition-transform duration-150" style="transform: scale(1); width: 794px; min-height: 1123px; position: absolute; top: 0; left: 0;">
-              
-    <div class="invoice-sheet professional-template bg-white text-gray-800 p-6 sm:p-8 text-xs leading-relaxed max-w-full relative flex flex-col justify-between" style="--theme-color: #4F46E5;">
-      <!-- Top Brand Color Stripe -->
-      <div class="absolute top-0 left-0 right-0 h-2" style="background-color: #4F46E5;"></div>
-
-      <div>
-        <!-- Header Section -->
-        <div class="flex flex-row justify-between items-start pb-4 border-b-2 border-gray-200 gap-4 mt-0.5">
-          <div class="flex items-start gap-3">
-            
-            <div>
-              <h1 class="text-xl font-bold text-gray-900 tracking-tight">Your Company Name</h1>
-              
-              <div class="text-[11px] text-gray-600 mt-0.5 space-y-0.5 whitespace-pre-line leading-tight">
-                
-                
-                
-                
-              </div>
-            </div>
-          </div>
-
-          <div class="text-right shrink-0">
-            <div class="inline-block px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-white mb-1.5" style="background-color: #4F46E5;">
-              TAX INVOICE
-            </div>
-            <div class="text-sm font-bold font-mono text-gray-900">INV-001</div>
-            
-            <table class="text-[11px] text-right mt-1 ml-auto">
-              <tr>
-                <td class="text-gray-500 pr-2 py-0.5">Invoice Date:</td>
-                <td class="font-semibold text-gray-800">Sep 10, 2026</td>
-              </tr>
-              <tr>
-                <td class="text-gray-500 pr-2 py-0.5">Payment Due:</td>
-                <td class="font-semibold text-red-600">Sep 25, 2026</td>
-              </tr>
-              
-              
-                <tr>
-                  <td class="text-gray-500 pr-2 py-0.5">Place of Supply:</td>
-                  <td class="font-semibold text-gray-800">29-Karnataka</td>
-                </tr>
-              
-              
-            </table>
-          </div>
-        </div>
-
-        <!-- Bill To & Ship To Grid Cards -->
-        <div class="grid grid-cols-2 gap-3 my-3.5">
-          <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5">
-            <div class="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1 flex items-center gap-1">
-              <span class="w-1.5 h-1.5 rounded-full" style="background-color: #4F46E5;"></span>
-              BILL TO / CUSTOMER
-            </div>
-            <div class="font-bold text-gray-900 text-xs">Customer Name</div>
-            <div class="text-[11px] text-gray-600 mt-0.5 space-y-0.5 whitespace-pre-line leading-tight">
-              
-              
-              
-              
-            </div>
-          </div>
-
-          <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5">
-            <div class="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-1 flex items-center gap-1">
-              <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
-              SHIP TO / DELIVERY
-            </div>
-            
-              <div class="text-[11px] text-gray-500 italic mt-0.5">Same as billing address</div>
-            
-          </div>
-        </div>
-
-        <!-- Items Table -->
-        <div class="border border-gray-200 rounded-lg overflow-hidden my-3 shadow-2xs">
-          <table class="w-full border-collapse">
-            <thead>
-              <tr class="bg-slate-100 text-gray-700 text-[10px] font-bold uppercase tracking-wider border-b border-gray-200">
-                <th class="py-2 px-2.5 text-left w-8 border-r border-gray-200">#</th>
-                <th class="py-2 px-2.5 text-left border-r border-gray-200">Item & Description</th>
-                <th class="py-2 px-2.5 text-right border-r border-gray-200">Qty</th>
-                <th class="py-2 px-2.5 text-right border-r border-gray-200">Rate</th>
-                
-                <th class="py-2 px-2.5 text-right">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-      <tr class="border-b border-gray-200 last:border-b-0">
-        <td class="py-2 px-2.5 text-left text-xs font-mono text-gray-500 w-8 border-r border-gray-200">1</td>
-        <td class="py-2 px-2.5 text-left border-r border-gray-200">
-          <div class="font-semibold text-gray-900 text-xs">Web Design &amp; UI Consulting</div>
-          <div class="text-[10px] text-gray-500 font-mono mt-0.5">HSN/SAC: <span class="text-gray-700">998314</span></div>
-        </td>
-        <td class="py-2 px-2.5 text-right text-xs text-gray-700 font-mono border-r border-gray-200">1 hrs</td>
-        <td class="py-2 px-2.5 text-right text-xs text-gray-700 font-mono border-r border-gray-200">5,000.00</td>
-        
-        <td class="py-2 px-2.5 text-right font-semibold text-xs text-gray-900 font-mono">₹ 5,000.00</td>
-      </tr>
-    
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Calculations Section -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-3">
-          <!-- Amount in words & Bank info -->
-          <div class="space-y-2.5">
-            
-              <div class="p-2.5 bg-slate-50 border border-slate-200 rounded text-[11px] text-gray-700">
-                <span class="font-bold text-gray-900 block text-[10px] uppercase tracking-wider mb-0.5">Amount in Words</span>
-                <span class="italic font-medium">Five Thousand Nine Hundred Rupees Only</span>
-              </div>
-            
-
-            
-          </div>
-
-          <!-- Summary Totals Table -->
-          <div>
-            <div class="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-1.5 text-[11px]">
-              <div class="flex justify-between text-gray-700">
-                <span>Taxable Subtotal:</span>
-                <span class="font-mono font-medium">₹ 5,000.00</span>
-              </div>
-
-              
-
-              
-
-              
-                <div class="flex justify-between text-gray-700">
-                  <span>CGST (9%):</span>
-                  <span class="font-mono">₹ 450.00</span>
-                </div>
-                <div class="flex justify-between text-gray-700">
-                  <span>SGST (9%):</span>
-                  <span class="font-mono">₹ 450.00</span>
-                </div>
-              
-
-              
-
-              
-
-              
-
-              <div class="flex justify-between pt-2 border-t-2 border-gray-300 text-sm font-bold text-gray-900">
-                <span>Grand Total:</span>
-                <span class="font-mono" style="color: #4F46E5;">₹ 5,900.00</span>
-              </div>
-
-              
-            </div>
-          </div>
-        </div>
+      <div id="previewColumn" class="hidden lg:block lg:col-span-6 xl:col-span-6 lg:sticky lg:top-24 h-[calc(100vh-7rem)]">
+        <div id="previewContainer" class="h-full"></div>
       </div>
-
-      <!-- Notes, Terms & Signatory Section -->
-      <div class="pt-3 border-t border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4 items-end mt-2">
-        <div class="text-[11px] space-y-1.5">
-          
-            <div>
-              <div class="font-bold text-gray-700 uppercase tracking-wider text-[9px]">Notes:</div>
-              <div class="text-gray-600 whitespace-pre-line leading-tight">Thank you for your business! Please make payments before the due date.</div>
-            </div>
-          
-
-          
-            <div>
-              <div class="font-bold text-gray-700 uppercase tracking-wider text-[9px]">Terms & Conditions:</div>
-              <div class="text-gray-500 whitespace-pre-line leading-tight text-[10px]">1. Goods/Services once billed will not be refunded.
-2. Overdue interest @ 1.5% per month will apply if payment exceeds due date.</div>
-            </div>
-          
-        </div>
-
-        <div class="text-right">
-          <div class="text-[10px] text-gray-500 mb-0.5">For <strong>Company</strong></div>
-          <div class="h-10 flex items-end justify-end">
-            
-          </div>
-          <div class="border-t border-gray-300 w-40 ml-auto pt-1">
-            <div class="text-[11px] font-bold text-gray-900">Authorized Signatory</div>
-            <div class="text-[9px] text-gray-500">Authorized Signatory</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-            </div>
-          </div>
-        </div>
-      </div>
-</div>
-      </section>
 
     </div>
   </main>
 
   <!-- IN-DEPTH SEO ARTICLE & USER GUIDE (CRAWLABLE CONTENT) -->
-  <article style="content-visibility: auto; contain-intrinsic-size: 1000px;" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-slate-800 border-t border-slate-200/80 no-print space-y-12">
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-slate-800 border-t border-slate-200/80 no-print space-y-12">
     
     <!-- Hero Title & Overview -->
-    <header class="text-center space-y-4 max-w-3xl mx-auto">
+    <div class="text-center space-y-4 max-w-3xl mx-auto">
       <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-display">
         Free Invoice Generator — Create & Download PDF Invoices
       </h1>
-      <p class="text-base sm:text-lg text-slate-700 leading-relaxed">
+      <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
         The simplest, fastest, and most privacy-friendly online invoice generator on the web. Create professional, watermark-free A4 PDF invoices in under 60 seconds with <strong>zero signup</strong> and <strong>zero cost</strong> on <strong>invoicepdfgenerator</strong>.
       </p>
-    </header>
+    </div>
 
-    <!-- Key Value Pillars Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+    <!-- Core Value Pillars Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-2.5">
         <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
-          <i data-lucide="zap" class="w-5 h-5"></i>
-        </div>
-        <h2 class="font-bold text-slate-900 text-lg">Instant Single-Page A4 PDF</h2>
-        <p class="text-xs text-slate-600 leading-relaxed">
-          Never worry about awkward page breaks. Our invoice engine formats your document to strictly fit a single A4 page with crystal-clear 300 DPI vector sharpness.
-        </p>
-      </div>
-
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
           <i data-lucide="shield-check" class="w-5 h-5"></i>
         </div>
-        <h2 class="font-bold text-slate-900 text-lg">100% Client-Side Privacy</h2>
+        <h2 class="text-base font-bold text-slate-900">100% Free & No Watermark</h2>
         <p class="text-xs text-slate-600 leading-relaxed">
-          Your customer data, banking information, and billing numbers never leave your computer. Everything calculates and exports directly inside your browser.
+          Never worry about paywalls or branded watermarks on your client invoices. Download clean, publication-ready PDF documents instantly.
         </p>
       </div>
 
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-          <i data-lucide="user-x" class="w-5 h-5"></i>
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-2.5">
+        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+          <i data-lucide="lock" class="w-5 h-5"></i>
         </div>
-        <h2 class="font-bold text-slate-900 text-lg">No Signup • No Watermark</h2>
+        <h2 class="text-base font-bold text-slate-900">100% Privacy & Local-First</h2>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Your customer names, prices, addresses, and bank accounts never leave your device. All calculations and PDF generation happen directly in your browser.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-2.5">
+        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+          <i data-lucide="zap" class="w-5 h-5"></i>
+        </div>
+        <h2 class="text-base font-bold text-slate-900">No Signup or Login Required</h2>
         <p class="text-xs text-slate-600 leading-relaxed">
           Skip lengthy registration forms, passwords, and verification emails. Open invoicepdfgenerator, fill in your invoice details, and download your bill in seconds.
         </p>
       </div>
-
     </div>
 
     <!-- Step-by-Step Guide -->
-    <section class="bg-white p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-      <div class="max-w-2xl">
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">How to Create an Invoice in 4 Simple Steps</h2>
-        <p class="text-sm text-slate-600 mt-1">Follow this quick tutorial to generate your bill right now.</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-        <div class="flex gap-4">
-          <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shrink-0">1</div>
+    <article class="bg-white p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-6">
+      <h2 class="text-2xl font-bold text-slate-900">How to Make a Professional Invoice Online in 4 Simple Steps</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+        <div class="flex items-start gap-3">
+          <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0">1</span>
           <div>
-            <h3 class="font-bold text-slate-900 text-sm">Add Your Business & Client Details</h3>
-            <p class="text-xs text-slate-600 mt-1">Upload your logo, enter your company name, tax ID (GSTIN/PAN), address, and your client's billing information.</p>
+            <h3 class="font-bold text-slate-900">Enter Seller Information & Upload Logo</h3>
+            <p class="text-xs text-slate-600 mt-1">Provide your business or freelancer name, address, email, contact number, and optionally upload your company logo.</p>
           </div>
         </div>
 
-        <div class="flex gap-4">
-          <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shrink-0">2</div>
+        <div class="flex items-start gap-3">
+          <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0">2</span>
           <div>
-            <h3 class="font-bold text-slate-900 text-sm">List Items & Hourly Services</h3>
-            <p class="text-xs text-slate-600 mt-1">Add your line items, quantities, hourly or fixed rates, units, and HSN/SAC codes. Totals calculate automatically.</p>
+            <h3 class="font-bold text-slate-900">Input Customer / Client Details</h3>
+            <p class="text-xs text-slate-600 mt-1">Fill in the client's company name, billing address, and separate shipping address if applicable.</p>
           </div>
         </div>
 
-        <div class="flex gap-4">
-          <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shrink-0">3</div>
+        <div class="flex items-start gap-3">
+          <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0">3</span>
           <div>
-            <h3 class="font-bold text-slate-900 text-sm">Configure Taxes, Bank & UPI QR</h3>
+            <h3 class="font-bold text-slate-900">Add Line Items, Deliverables & Rates</h3>
+            <p class="text-xs text-slate-600 mt-1">Specify items, consulting hours, HSN/SAC codes, quantities, and unit rates. Subtotals and discounts calculate automatically.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0">4</span>
+          <div>
+            <h3 class="font-bold text-slate-900">Select Tax Mode & Download Single A4 PDF</h3>
             <p class="text-xs text-slate-600 mt-1">Choose between India GST (CGST/SGST/IGST), single VAT rate, or no tax. Add payment details or UPI QR and download your PDF instantly.</p>
           </div>
         </div>
-
-        <div class="flex gap-4">
-          <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shrink-0">4</div>
-          <div>
-            <h3 class="font-bold text-slate-900 text-sm">Sign & Download PDF</h3>
-            <p class="text-xs text-slate-600 mt-1">Draw your digital signature directly on the touchscreen or upload an image. Click Download PDF to save your invoice.</p>
-          </div>
-        </div>
       </div>
-    </section>
+    </article>
 
-    <!-- Detailed Feature Comparison & Templates -->
-    <section class="space-y-6">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight text-center">Built for Freelancers, Agencies & Small Businesses</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-          <h3 class="font-bold text-slate-900 text-base">🇮🇳 Indian GST Invoicing Engine</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Built-in support for Indian GST compliance. Seamlessly switches between Intra-state (CGST 9% + SGST 9%) and Inter-state (IGST 18%) based on Place of Supply, complete with HSN/SAC code lookups, Reverse Charge (RCM), and Indian Rupee Lakhs/Crores Amount in Words.
-          </p>
-        </div>
-
-        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-          <h3 class="font-bold text-slate-900 text-base">🌍 Global Multi-Currency Support</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Bill international clients in US Dollar ($), Euro (€), British Pound (£), Canadian Dollar (CA$), Australian Dollar (A$), UAE Dirham (AED), Singapore Dollar (S$), Japanese Yen (¥), and more with accurate currency symbol placement and formatting.
-          </p>
-        </div>
-
-        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-          <h3 class="font-bold text-slate-900 text-base">📱 Scan-to-Pay UPI QR Codes</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Get paid 3x faster by displaying an automated UPI QR code on your invoice. Clients can scan the QR code using Google Pay, PhonePe, Paytm, BHIM, or any banking app to settle payments directly to your bank account.
-          </p>
-        </div>
-
-        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
-          <h3 class="font-bold text-slate-900 text-base">🎨 3 Designer Invoice Templates</h3>
-          <p class="text-xs text-slate-600 leading-relaxed">
-            Pick from <strong>Minimal Clean</strong> (Nordic typography), <strong>Professional Corporate</strong> (traditional corporate billing), or <strong>Modern Studio</strong> (vibrant tech aesthetic) with customizable color palettes.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ Accordion / Section -->
-    <section class="bg-white p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-      <div class="max-w-2xl">
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Frequently Asked Questions</h2>
-        <p class="text-sm text-slate-600 mt-1">Everything you need to know about our free invoice generator.</p>
+    <!-- Comparison Table: Free Invoice Generator vs Traditional Accounting SaaS -->
+    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-6">
+      <div class="space-y-1">
+        <h2 class="text-2xl font-bold text-slate-900">Free Invoice Generator vs Traditional Accounting Software</h2>
+        <p class="text-xs text-slate-500">Why freelancers and independent professionals prefer invoicepdfgenerator over complex accounting SaaS.</p>
       </div>
 
-      <div class="space-y-4 divide-y divide-slate-100 text-xs">
-        
-        <div class="pt-4 space-y-1.5">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="border-b-2 border-slate-200 text-slate-700 uppercase font-bold text-[11px] bg-slate-50">
+              <th class="py-3 px-4">Feature</th>
+              <th class="py-3 px-4 text-indigo-700 font-extrabold">invoicepdfgenerator (This Tool)</th>
+              <th class="py-3 px-4 text-slate-500">Traditional Accounting SaaS</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-slate-700">
+            <tr>
+              <td class="py-3 px-4 font-semibold">Account Creation</td>
+              <td class="py-3 px-4 font-bold text-emerald-600">❌ No Signup Needed (Instant)</td>
+              <td class="py-3 px-4 text-rose-500">Mandatory Registration & Setup</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold">Pricing & Subscriptions</td>
+              <td class="py-3 px-4 font-bold text-emerald-600">100% Free Forever</td>
+              <td class="py-3 px-4 text-slate-500">$15 – $50 / month recurring fees</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold">Watermark on PDF</td>
+              <td class="py-3 px-4 font-bold text-emerald-600">❌ Zero Watermark</td>
+              <td class="py-3 px-4 text-rose-500">Watermarked on free plans</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold">Data Privacy</td>
+              <td class="py-3 px-4 font-bold text-emerald-600">🔒 100% Client-Side Local Storage</td>
+              <td class="py-3 px-4 text-slate-500">Uploaded to third-party cloud servers</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold">Time to First Invoice</td>
+              <td class="py-3 px-4 font-bold text-emerald-600">&lt; 60 Seconds</td>
+              <td class="py-3 px-4 text-slate-500">10 – 20 minutes configuration</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold">India GST & UPI QR</td>
+              <td class="py-3 px-4 font-bold text-emerald-600">✅ Built-in Native Support</td>
+              <td class="py-3 px-4 text-slate-500">Often requires enterprise add-on</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Targeted Use Cases Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
+        <h2 class="text-lg font-bold text-slate-900">Freelancer & Creative Studio Invoicing</h2>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Tailored for web developers, graphic designers, copywriters, consultants, photographers, and video editors. Easily bill hourly rates, project milestones, or fixed service packages with multi-currency support in USD, EUR, GBP, AUD, CAD, and AED.
+        </p>
+        <a href="/freelancer-invoice-generator" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1">
+          Explore Freelancer Invoice Generator &rarr;
+        </a>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
+        <h2 class="text-lg font-bold text-slate-900">India GST Compliant Invoicing</h2>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Create GST tax invoices adhering to Indian GST invoicing regulations. Features automatic CGST/SGST vs IGST tax split, HSN/SAC code tracking, Place of Supply state codes, and dynamic UPI QR code generator for instant settlements.
+        </p>
+        <a href="/gst-invoice-generator" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1">
+          Explore Free GST Invoice Generator &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Frequently Asked Questions (FAQ) Section -->
+    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-2xs space-y-6">
+      <div class="space-y-1">
+        <h2 class="text-2xl font-bold text-slate-900">Frequently Asked Questions (FAQ)</h2>
+        <p class="text-xs text-slate-500">Everything you need to know about creating free invoices with invoicepdfgenerator.</p>
+      </div>
+
+      <div class="space-y-4 text-xs divide-y divide-slate-100">
+        <div class="pt-4 first:pt-0 space-y-1.5">
           <h3 class="font-bold text-slate-900 text-sm">Is invoicepdfgenerator really 100% free with no watermark?</h3>
           <p class="text-slate-600 leading-relaxed">Yes! invoicepdfgenerator is completely free forever. There are no hidden fees, no subscriptions, and absolutely no watermarks on your generated PDF invoices.</p>
         </div>
@@ -1200,30 +484,29 @@
           <p class="text-slate-600 leading-relaxed">Yes. All three templates are strictly engineered and scaled for standard A4 portrait dimensions (210mm x 297mm) so your invoices always fit perfectly on exactly one page.</p>
         </div>
       </div>
-    </section>
+    </div>
 
-  </article>
+  </section>
 
   <!-- MOBILE FLOATING ACTION BAR -->
-  <div id="mobileActionBar" class="lg:hidden fixed bottom-0 left-0 right-0 p-2.5 px-3 bg-white/95 backdrop-blur-md border-t border-slate-200 z-30 flex items-center justify-between gap-2 shadow-lg no-print">
-    <button type="button" id="mobileTogglePreviewBtn" aria-label="Toggle between edit form and live A4 preview" class="py-2.5 px-3.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 rounded-xl font-bold text-xs flex items-center gap-1.5 border border-slate-200/80 transition-colors shrink-0">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-indigo-600"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-      <span id="mobileToggleText">View A4</span>
-    </button>
-    <button type="button" id="mobileDownloadPdfBtn" aria-label="Download invoice as PDF" class="flex-1 py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white rounded-xl font-bold text-xs shadow-md shadow-indigo-200 flex items-center justify-center gap-2 transition-all">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Download Free PDF
+  <div id="mobileActionBar" class="lg:hidden fixed bottom-0 left-0 right-0 p-3 bg-white/95 backdrop-blur-md border-t border-slate-200 z-30 flex items-center justify-between gap-2 shadow-lg no-print">
+    <div class="text-xs text-slate-500">
+      <span class="font-bold text-slate-900">100% Free</span> • No Watermark
+    </div>
+    <button type="button" id="mobileDownloadPdfBtn" class="flex-1 max-w-xs py-2.5 px-4 bg-indigo-600 text-white rounded-xl font-bold text-xs shadow-md shadow-indigo-200 flex items-center justify-center gap-2">
+      <i data-lucide="download" class="w-4 h-4"></i> Download Free PDF
     </button>
   </div>
 
   <!-- SAVED INVOICES DRAWER (LOCAL STORAGE) -->
   <div id="historyBackdrop" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden transition-opacity"></div>
-  <div id="historyDrawer" role="dialog" aria-modal="true" aria-label="Invoice History" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white z-50 shadow-2xl border-l border-slate-200 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+  <aside id="historyDrawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white z-50 shadow-2xl border-l border-slate-200 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
     <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
       <div>
         <h3 class="font-bold text-slate-900 text-base">Invoice History</h3>
-        <p class="text-xs text-slate-600">Saved locally on your device (Offline & Private)</p>
+        <p class="text-xs text-slate-500">Saved locally on your device (Offline & Private)</p>
       </div>
-      <button type="button" id="historyCloseBtn" aria-label="Close invoice history drawer" class="p-1.5 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-200 transition-colors">
+      <button type="button" id="historyCloseBtn" class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-200 transition-colors">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
     </div>
@@ -1232,19 +515,19 @@
     <div class="p-4 border-b border-slate-100 bg-indigo-50/50 flex items-center justify-between gap-2">
       <div class="text-xs text-indigo-900 font-semibold">Data Backup & Restore</div>
       <div class="flex items-center gap-2">
-        <button type="button" id="exportBackupBtn" aria-label="Export backup JSON data" class="px-2.5 py-1 bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-50 rounded-lg text-xs font-semibold shadow-2xs transition-colors inline-flex items-center gap-1">
+        <button type="button" id="exportBackupBtn" class="px-2.5 py-1 bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-50 rounded-lg text-xs font-semibold shadow-2xs transition-colors inline-flex items-center gap-1">
           <i data-lucide="download-cloud" class="w-3 h-3"></i> Export JSON
         </button>
-        <button type="button" id="importBackupBtn" aria-label="Import backup JSON data" class="px-2.5 py-1 bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-50 rounded-lg text-xs font-semibold shadow-2xs transition-colors inline-flex items-center gap-1">
+        <button type="button" id="importBackupBtn" class="px-2.5 py-1 bg-white border border-indigo-200 text-indigo-700 hover:bg-indigo-50 rounded-lg text-xs font-semibold shadow-2xs transition-colors inline-flex items-center gap-1">
           <i data-lucide="upload-cloud" class="w-3 h-3"></i> Import JSON
         </button>
-        <input type="file" id="backupFileInput" aria-label="Choose JSON backup file" accept=".json" class="hidden" />
+        <input type="file" id="backupFileInput" accept=".json" class="hidden" />
       </div>
     </div>
 
     <!-- History List Scroll -->
     <div class="flex-1 overflow-y-auto p-4 space-y-3" id="historyListContainer"></div>
-  </div>
+  </aside>
 
   <!-- SIGNATURE PAD MODAL CONTAINER -->
   <div id="sigModalContainer"></div>
@@ -1252,117 +535,12 @@
   <!-- DEDICATED PRINT CONTAINER -->
   <div id="printContainer" class="hidden"></div>
 
-  
-  
-
-    
-    
-    <!-- TEMPLATES DIRECTORY SECTION (By Industry, Country, Language & Recent) -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-slate-200/80 no-print" style="content-visibility: auto; contain-intrinsic-size: 800px;">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 text-sm">
-      
-      <!-- Column 1: Templates by Industry -->
-      <div class="space-y-4">
-        <h2 class="text-base font-bold text-indigo-700 font-display">Templates by Industry</h2>
-        <ul class="space-y-2 list-disc pl-5 text-xs text-slate-600">
-          <li><a href="/blank-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Blank Invoice Template</a></li>
-          <li><a href="/sales-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Sales Invoice Template</a></li>
-          <li><a href="/sole-trader-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Sole Trader Invoice Template</a></li>
-          <li><a href="/invoice-template-billable-hours" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Invoice Template Billable Hours</a></li>
-          <li><a href="/gym-fitness-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Gym and Fitness Invoice Template</a></li>
-          <li><a href="/auto-repair-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Auto Repair Invoice Template</a></li>
-          <li><a href="/photography-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Photography Invoice Template</a></li>
-          <li><a href="/restaurant-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Restaurant Invoice Template</a></li>
-          <li><a href="/consultant-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Consultant Invoice Template</a></li>
-          <li><a href="/invoice-template-with-banking-details" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Invoice Template with Banking Details</a></li>
-          <li><a href="/medical-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Medical Invoice Template</a></li>
-          <li><a href="/commercial-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Commercial Invoice Template</a></li>
-          <li><a href="/free-basic-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Free Basic Invoice Template</a></li>
-          <li><a href="/proforma-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Proforma Invoice Template</a></li>
-          <li><a href="/translation-service-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Translation Service Invoice Template</a></li>
-          <li><a href="/service-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Service Invoice Template</a></li>
-          <li><a href="/contractor-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Contractor Invoice Template</a></li>
-          <li><a href="/car-maintenance-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Car Maintenance Invoice Template</a></li>
-          <li><a href="/free-subcontractor-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Free Subcontractor Invoice Template</a></li>
-          <li><a href="/teaching-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Teaching Invoice Template</a></li>
-        </ul>
-      </div>
-
-      <!-- Column 2: Templates by Country -->
-      <div class="space-y-4">
-        <h2 class="text-base font-bold text-indigo-700 font-display">Templates by Country</h2>
-        <ul class="space-y-2 list-disc pl-5 text-xs text-slate-600">
-          <li><a href="/australian-gst-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Australian GST Invoice Template</a></li>
-          <li><a href="/australian-invoice-template-no-gst" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Australian Invoice Template no GST</a></li>
-          <li><a href="/uk-invoice-template-no-vat" class="hover:text-indigo-600 hover:underline transition-colors font-medium">UK Invoice Template no VAT</a></li>
-          <li><a href="/nz-invoice-template-with-gst" class="hover:text-indigo-600 hover:underline transition-colors font-medium">NZ Invoice Template with GST</a></li>
-          <li><a href="/uk-invoice-template-with-vat" class="hover:text-indigo-600 hover:underline transition-colors font-medium">UK Invoice Template with VAT</a></li>
-          <li><a href="/south-africa-invoice-template-with-vat" class="hover:text-indigo-600 hover:underline transition-colors font-medium">South Africa Invoice Template with VAT</a></li>
-          <li><a href="/malaysia-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Malaysia Invoice Template</a></li>
-          <li><a href="/canadian-invoice-template-with-hst" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Canadian Invoice Template with HST - Canada</a></li>
-          <li><a href="/euro-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Euro Invoice Template</a></li>
-          <li><a href="/india-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">India Invoice Template</a></li>
-          <li><a href="/uae-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">UAE Invoice Template</a></li>
-          <li><a href="/chinese-invoice-template-fapiao" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Chinese Invoice Template "Fapiao"</a></li>
-          <li><a href="/german-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">German Invoice Template</a></li>
-          <li><a href="/indonesian-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Indonesian Invoice Template</a></li>
-          <li><a href="/philippines-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Philippines Invoice Template</a></li>
-          <li><a href="/singapore-invoice-template-with-gst" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Singapore Invoice Template with GST</a></li>
-          <li><a href="/hong-kong-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Hong Kong Invoice Template</a></li>
-          <li><a href="/gst-invoice-template-canada" class="hover:text-indigo-600 hover:underline transition-colors font-medium">GST Invoice Template - Canada</a></li>
-          <li><a href="/mexico-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Mexico Invoice Template</a></li>
-          <li><a href="/kenya-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Kenya Invoice Template</a></li>
-        </ul>
-      </div>
-
-      <!-- Column 3: Templates by Language & Recently Added -->
-      <div class="space-y-8">
-        
-        <!-- Templates by Language -->
-        <div class="space-y-4">
-          <h2 class="text-base font-bold text-indigo-700 font-display">Templates by Language</h2>
-          <ul class="space-y-2 list-disc pl-5 text-xs text-slate-600">
-            <li><a href="/faktura-online-gratis" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Faktura Online Gratis</a></li>
-            <li><a href="/modele-de-facture" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Modèle de facture</a></li>
-            <li><a href="/modello-di-fattura-on-line" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Modello di fattura on-line</a></li>
-            <li><a href="/online-arve-malli" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Online arve malli</a></li>
-            <li><a href="/modelo-de-fatura-on-line" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Modelo de fatura on-line</a></li>
-            <li><a href="/plantilla-de-factura-en-linea" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Plantilla de factura en línea</a></li>
-            <li><a href="/online-faktura-mal" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Online Faktura Mal</a></li>
-            <li><a href="/online-rechnungsvorlage" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Online- Rechnungsvorlage</a></li>
-            <li><a href="/online-factuur-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Online factuur template</a></li>
-            <li><a href="/natet-fakturamall" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Nätet fakturamall</a></li>
-            <li><a href="/sablon-factura-on-line" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Șablon factură on-line</a></li>
-          </ul>
-        </div>
-
-        <!-- Recently Added Templates -->
-        <div class="space-y-4">
-          <h2 class="text-base font-bold text-indigo-700 font-display">Recently Added Templates</h2>
-          <ul class="space-y-2 list-disc pl-5 text-xs text-slate-600">
-            <li><a href="/travel-tourism-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Travel and Tourism Invoice Template</a></li>
-            <li><a href="/self-employed-cleaner-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Self-employed Cleaner Invoice Template</a></li>
-            <li><a href="/rent-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Rent Invoice Template</a></li>
-            <li><a href="/vat-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Vat invoice template</a></li>
-            <li><a href="/digital-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Digital Invoice Template</a></li>
-            <li><a href="/car-rental-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Car rental invoice template</a></li>
-            <li><a href="/photographer-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Photographer Invoice Template</a></li>
-            <li><a href="/sole-proprietor-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Sole Proprietor Invoice Template</a></li>
-            <li><a href="/travel-agency-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Travel Agency Invoice Template</a></li>
-            <li><a href="/plumber-invoice-template" class="hover:text-indigo-600 hover:underline transition-colors font-medium">Plumber Invoice Template</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
   <!-- FOOTER -->
-  <footer style="content-visibility: auto; contain-intrinsic-size: 300px;" class="mt-auto py-12 bg-white border-t border-slate-200 text-xs text-slate-600 no-print">
+  <footer class="mt-auto py-12 bg-white border-t border-slate-200 text-xs text-slate-500 no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
       
       <!-- Key Features Badge Bar -->
-      <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-8 font-medium text-slate-700">
+      <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-8 font-medium text-slate-600">
         <span>⚡ Instant A4 PDF</span>
         <span>🔒 100% Client-Side & Private</span>
         <span>🚫 No Signup Required</span>
@@ -1371,22 +549,22 @@
       </div>
 
       <!-- Keyword Landing Pages Internal Links -->
-      <div class="pt-6 border-t border-slate-100 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-slate-600">
-        <span class="font-semibold text-slate-800">Quick Tools:</span>
-        <a href="/" class="hover:text-indigo-600 transition-colors font-medium">Free Invoice Generator</a>
-        <a href="/freelancer-invoice-generator" class="hover:text-indigo-600 transition-colors font-medium">Freelancer Invoice Generator</a>
-        <a href="/gst-invoice-generator" class="hover:text-indigo-600 transition-colors font-medium">GST Invoice Generator India</a>
-        <a href="/invoice-generator-pdf" class="hover:text-indigo-600 transition-colors font-medium">Invoice PDF Generator</a>
-        <a href="/free-invoice-generator-no-signup" class="hover:text-indigo-600 transition-colors font-medium">Invoice Generator No Signup</a>
+      <div class="pt-6 border-t border-slate-100 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-slate-500">
+        <span class="font-semibold text-slate-700">Quick Tools:</span>
+        <a href="/" class="hover:text-indigo-600 transition-colors">Free Invoice Generator</a>
+        <a href="/freelancer-invoice-generator" class="hover:text-indigo-600 transition-colors">Freelancer Invoice Generator</a>
+        <a href="/gst-invoice-generator" class="hover:text-indigo-600 transition-colors">GST Invoice Generator India</a>
+        <a href="/invoice-generator-pdf" class="hover:text-indigo-600 transition-colors">Invoice PDF Generator</a>
+        <a href="/free-invoice-generator-no-signup" class="hover:text-indigo-600 transition-colors">Invoice Generator No Signup</a>
       </div>
 
-      <p class="text-slate-500 text-[11px] text-center max-w-2xl mx-auto">
+      <p class="text-slate-400 text-[11px] text-center max-w-2xl mx-auto">
         All invoice calculations and rendering happen directly inside your web browser. No private customer or business data is transmitted to external servers.
       </p>
     </div>
   </footer>
 
   <!-- App Entry Script -->
-  <script type="module" src="js/app.js?v=2.5.0"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
