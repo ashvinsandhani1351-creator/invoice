@@ -29,10 +29,8 @@ export class InvoicePreview {
   getOptimalInitialZoom() {
     const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
     if (screenWidth < 640) {
-      // Mobile screen: auto-scale so 794px A4 fits cleanly with 24px total padding
       return Math.max(0.35, Math.min(1.0, Math.round(((screenWidth - 32) / 794) * 100) / 100));
     } else if (screenWidth < 1024) {
-      // Tablet screen
       return Math.max(0.5, Math.min(1.0, Math.round(((screenWidth - 64) / 794) * 100) / 100));
     }
     return 1.0;
@@ -49,7 +47,13 @@ export class InvoicePreview {
   init(invoice) {
     this.invoice = invoice;
     this.zoomLevel = this.getOptimalInitialZoom();
-    this.render();
+    const hasPreRendered = document.getElementById('invoiceRenderRoot') !== null;
+    if (hasPreRendered) {
+      this.bindEvents();
+      this.render();
+    } else {
+      this.renderFull();
+    }
   }
 
   async update(invoice) {
@@ -76,6 +80,50 @@ export class InvoicePreview {
   render() {
     if (!this.container || !this.invoice) return;
 
+    const invoiceRenderRoot = document.getElementById('invoiceRenderRoot');
+    const scaledWrapper = document.getElementById('scaledWrapper');
+    
+    if (!invoiceRenderRoot || !scaledWrapper) {
+      this.renderFull();
+      return;
+    }
+
+    const inv = this.invoice;
+    const calcs = calculateInvoice(inv);
+    const templateHtml = renderInvoiceTemplate(inv, calcs, this.qrCodeUrl);
+    const scaledHeight = Math.round(1123 * this.zoomLevel) + 24;
+
+    // Instant in-place template update
+    invoiceRenderRoot.innerHTML = templateHtml;
+    invoiceRenderRoot.style.transform = `scale(${this.zoomLevel})`;
+    scaledWrapper.style.width = `${Math.round(794 * this.zoomLevel)}px`;
+    scaledWrapper.style.height = `${scaledHeight}px`;
+
+    // Sync template active tab states
+    const templateBtns = this.container.querySelectorAll('button[data-template]');
+    templateBtns.forEach(btn => {
+      const tId = btn.getAttribute('data-template');
+      const isSelected = inv.template === tId;
+      btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+      btn.className = isSelected 
+        ? 'px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all bg-white text-indigo-700 font-bold shadow-xs'
+        : 'px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all text-gray-700 hover:text-gray-900';
+    });
+
+    // Sync color active dot states
+    const colorBtns = this.container.querySelectorAll('button[data-color]');
+    colorBtns.forEach(btn => {
+      const hex = btn.getAttribute('data-color');
+      const isSelected = inv.brandColor === hex;
+      btn.className = `w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 transition-transform hover:scale-110 cursor-pointer shadow-2xs ${isSelected ? 'border-gray-900 scale-110 shadow-xs' : 'border-white'}`;
+    });
+
+    if (window.lucide) window.lucide.createIcons({ root: invoiceRenderRoot });
+  }
+
+  renderFull() {
+    if (!this.container || !this.invoice) return;
+
     const inv = this.invoice;
     const calcs = calculateInvoice(inv);
     const templateHtml = renderInvoiceTemplate(inv, calcs, this.qrCodeUrl);
@@ -89,7 +137,7 @@ export class InvoicePreview {
           <!-- Template Selector Pills (Horizontal scroll on mobile) -->
           <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl overflow-x-auto max-w-full" role="tablist" aria-label="Invoice Templates">
             ${TEMPLATES.map(t => `
-              <button type="button" role="tab" aria-selected="${inv.template === t.id}" aria-label="Select ${t.name} template" data-template="${t.id}" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all touch-target ${inv.template === t.id ? 'bg-white text-indigo-700 font-bold shadow-xs' : 'text-gray-700 hover:text-gray-900'}">
+              <button type="button" role="tab" aria-selected="${inv.template === t.id}" aria-label="Select ${t.name} template" data-template="${t.id}" class="px-2.5 py-1.5 rounded-lg font-medium whitespace-nowrap transition-all ${inv.template === t.id ? 'bg-white text-indigo-700 font-bold shadow-xs' : 'text-gray-700 hover:text-gray-900'}">
                 ${t.name}
               </button>
             `).join('')}
@@ -97,12 +145,12 @@ export class InvoicePreview {
 
           <!-- Color Palette Picker -->
           <div class="flex items-center gap-1.5 shrink-0">
-            <span class="text-gray-600 font-medium hidden sm:inline">Theme:</span>
+            <span class="text-gray-600 font-medium hidden sm:inline text-xs">Theme:</span>
             <div class="flex items-center gap-1">
               ${BRAND_COLORS.map(c => `
-                <button type="button" data-color="${c.hex}" title="${c.name}" aria-label="Theme color ${c.name}" class="w-6 h-6 rounded-full border-2 transition-transform hover:scale-110 touch-target ${inv.brandColor === c.hex ? 'border-gray-900 scale-110 shadow-xs' : 'border-white'}" style="background-color: ${c.hex};"></button>
+                <button type="button" data-color="${c.hex}" title="${c.name}" aria-label="Theme color ${c.name}" class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 transition-transform hover:scale-110 cursor-pointer shadow-2xs ${inv.brandColor === c.hex ? 'border-gray-900 scale-110 shadow-xs' : 'border-white'}" style="background-color: ${c.hex};"></button>
               `).join('')}
-              <label class="w-6 h-6 rounded-full border border-gray-300 relative cursor-pointer overflow-hidden flex items-center justify-center bg-gradient-to-tr from-rose-400 via-purple-400 to-indigo-400 shrink-0" title="Custom Color">
+              <label class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border border-gray-300 relative cursor-pointer overflow-hidden flex items-center justify-center bg-gradient-to-tr from-rose-400 via-purple-400 to-indigo-400 shrink-0 shadow-2xs hover:scale-110 transition-transform" title="Custom Color">
                 <input type="color" id="customColorPicker" aria-label="Choose custom theme color" value="${inv.brandColor || '#4F46E5'}" class="opacity-0 absolute inset-0 cursor-pointer w-full h-full" />
               </label>
             </div>
