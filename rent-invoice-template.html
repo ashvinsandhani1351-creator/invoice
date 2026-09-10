@@ -290,9 +290,14 @@
   </footer>
 
   <script>
-    window.addEventListener("DOMContentLoaded", () => {
+    function initIcons() {
       if (window.lucide) window.lucide.createIcons();
-    });
+    }
+    if (document.readyState === 'loading') {
+      window.addEventListener("DOMContentLoaded", initIcons);
+    } else {
+      initIcons();
+    }
   </script>
 </body>
 </html>

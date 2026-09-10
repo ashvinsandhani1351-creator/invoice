@@ -592,8 +592,14 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-// Start app on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', () => {
+// Start app on DOMContentLoaded or immediately if DOM is already parsed
+function startApp() {
   const app = new InvoicePdfGeneratorApp();
   app.init();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startApp);
+} else {
+  startApp();
+}
