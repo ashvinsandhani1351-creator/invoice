@@ -13,6 +13,331 @@
       ],
       "destination": "https://invoicepdfgenerator.online/:path*",
       "permanent": true
+    },
+    {
+      "source": "/australian-gst-invoice-template",
+      "destination": "/australian-gst-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/australian-invoice-template-no-gst",
+      "destination": "/australian-invoice-template-no-gst.html",
+      "permanent": true
+    },
+    {
+      "source": "/auto-repair-invoice-template",
+      "destination": "/auto-repair-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/blank-invoice-template",
+      "destination": "/blank-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/canadian-invoice-template-with-hst",
+      "destination": "/canadian-invoice-template-with-hst.html",
+      "permanent": true
+    },
+    {
+      "source": "/car-maintenance-invoice-template",
+      "destination": "/car-maintenance-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/car-rental-invoice-template",
+      "destination": "/car-rental-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/chinese-invoice-template-fapiao",
+      "destination": "/chinese-invoice-template-fapiao.html",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-invoice-template",
+      "destination": "/commercial-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/consultant-invoice-template",
+      "destination": "/consultant-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/contractor-invoice-template",
+      "destination": "/contractor-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/digital-invoice-template",
+      "destination": "/digital-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/euro-invoice-template",
+      "destination": "/euro-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/faktura-online-gratis",
+      "destination": "/faktura-online-gratis.html",
+      "permanent": true
+    },
+    {
+      "source": "/free-basic-invoice-template",
+      "destination": "/free-basic-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/free-invoice-generator-no-signup",
+      "destination": "/free-invoice-generator-no-signup.html",
+      "permanent": true
+    },
+    {
+      "source": "/free-subcontractor-invoice-template",
+      "destination": "/free-subcontractor-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/freelancer-invoice-generator",
+      "destination": "/freelancer-invoice-generator.html",
+      "permanent": true
+    },
+    {
+      "source": "/german-invoice-template",
+      "destination": "/german-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/gst-invoice-generator",
+      "destination": "/gst-invoice-generator.html",
+      "permanent": true
+    },
+    {
+      "source": "/gst-invoice-template-canada",
+      "destination": "/gst-invoice-template-canada.html",
+      "permanent": true
+    },
+    {
+      "source": "/gym-fitness-invoice-template",
+      "destination": "/gym-fitness-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/hong-kong-invoice-template",
+      "destination": "/hong-kong-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/india-invoice-template",
+      "destination": "/india-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/indonesian-invoice-template",
+      "destination": "/indonesian-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/invoice-generator-pdf",
+      "destination": "/invoice-generator-pdf.html",
+      "permanent": true
+    },
+    {
+      "source": "/invoice-template-billable-hours",
+      "destination": "/invoice-template-billable-hours.html",
+      "permanent": true
+    },
+    {
+      "source": "/invoice-template-with-banking-details",
+      "destination": "/invoice-template-with-banking-details.html",
+      "permanent": true
+    },
+    {
+      "source": "/kenya-invoice-template",
+      "destination": "/kenya-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/malaysia-invoice-template",
+      "destination": "/malaysia-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/medical-invoice-template",
+      "destination": "/medical-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/mexico-invoice-template",
+      "destination": "/mexico-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/modele-de-facture",
+      "destination": "/modele-de-facture.html",
+      "permanent": true
+    },
+    {
+      "source": "/modello-di-fattura-on-line",
+      "destination": "/modello-di-fattura-on-line.html",
+      "permanent": true
+    },
+    {
+      "source": "/modelo-de-fatura-on-line",
+      "destination": "/modelo-de-fatura-on-line.html",
+      "permanent": true
+    },
+    {
+      "source": "/natet-fakturamall",
+      "destination": "/natet-fakturamall.html",
+      "permanent": true
+    },
+    {
+      "source": "/nz-invoice-template-with-gst",
+      "destination": "/nz-invoice-template-with-gst.html",
+      "permanent": true
+    },
+    {
+      "source": "/online-arve-malli",
+      "destination": "/online-arve-malli.html",
+      "permanent": true
+    },
+    {
+      "source": "/online-factuur-template",
+      "destination": "/online-factuur-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/online-faktura-mal",
+      "destination": "/online-faktura-mal.html",
+      "permanent": true
+    },
+    {
+      "source": "/online-rechnungsvorlage",
+      "destination": "/online-rechnungsvorlage.html",
+      "permanent": true
+    },
+    {
+      "source": "/philippines-invoice-template",
+      "destination": "/philippines-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/photographer-invoice-template",
+      "destination": "/photographer-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/photography-invoice-template",
+      "destination": "/photography-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/plantilla-de-factura-en-linea",
+      "destination": "/plantilla-de-factura-en-linea.html",
+      "permanent": true
+    },
+    {
+      "source": "/plumber-invoice-template",
+      "destination": "/plumber-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/proforma-invoice-template",
+      "destination": "/proforma-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/rent-invoice-template",
+      "destination": "/rent-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/restaurant-invoice-template",
+      "destination": "/restaurant-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/sablon-factura-on-line",
+      "destination": "/sablon-factura-on-line.html",
+      "permanent": true
+    },
+    {
+      "source": "/sales-invoice-template",
+      "destination": "/sales-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/self-employed-cleaner-invoice-template",
+      "destination": "/self-employed-cleaner-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/service-invoice-template",
+      "destination": "/service-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/singapore-invoice-template-with-gst",
+      "destination": "/singapore-invoice-template-with-gst.html",
+      "permanent": true
+    },
+    {
+      "source": "/sole-proprietor-invoice-template",
+      "destination": "/sole-proprietor-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/sole-trader-invoice-template",
+      "destination": "/sole-trader-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/south-africa-invoice-template-with-vat",
+      "destination": "/south-africa-invoice-template-with-vat.html",
+      "permanent": true
+    },
+    {
+      "source": "/teaching-invoice-template",
+      "destination": "/teaching-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/translation-service-invoice-template",
+      "destination": "/translation-service-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/travel-agency-invoice-template",
+      "destination": "/travel-agency-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/travel-tourism-invoice-template",
+      "destination": "/travel-tourism-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/uae-invoice-template",
+      "destination": "/uae-invoice-template.html",
+      "permanent": true
+    },
+    {
+      "source": "/uk-invoice-template-no-vat",
+      "destination": "/uk-invoice-template-no-vat.html",
+      "permanent": true
+    },
+    {
+      "source": "/uk-invoice-template-with-vat",
+      "destination": "/uk-invoice-template-with-vat.html",
+      "permanent": true
+    },
+    {
+      "source": "/vat-invoice-template",
+      "destination": "/vat-invoice-template.html",
+      "permanent": true
     }
   ],
   "headers": [
