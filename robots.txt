@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 
+# Canonical XML Sitemap
 Sitemap: https://invoicepdfgenerator.online/sitemap.xml
+Host: https://invoicepdfgenerator.online

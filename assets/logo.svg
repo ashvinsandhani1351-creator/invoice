@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="240" height="60">
+  <rect x="6" y="8" width="44" height="44" rx="12" fill="#4f46e5"/>
+  <path d="M17 17v26l3-1.5 3 1.5 3-1.5 3 1.5 3-1.5 3 1.5 3-1.5V17l-3 1.5-3-1.5-3 1.5-3-1.5-3 1.5-3-1.5Z" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M33 24h-7a2.5 2.5 0 0 0 0 5h5a2.5 2.5 0 0 1 0 5h-7" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M28 36.5v-15" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="62" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="20" font-weight="800" fill="#0f172a" letter-spacing="-0.5">invoicepdfgenerator</text>
+</svg>
